@@ -51,7 +51,7 @@ cp  = 800.   # Heat capacity J kg^{-1} K^-1
 
 # derived quantities
 V0 = float(edot0)*float(L) # boundary velocity
-invPe = kappa/V0/float(L) # inverse Pe number
+invPe = min(kappa/V0/float(L),1.e3) # inverse Pe number
 Di = float(G)/float(T0)/rho/cp # dissipation number
 
 s_per_year = 3600.*24.*365.25

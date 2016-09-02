@@ -37,7 +37,7 @@
       <real_value rank="0">0.</real_value>
     </current_time>
     <finish_time>
-      <real_value rank="0">.001</real_value>
+      <real_value rank="0">.01</real_value>
     </finish_time>
     <timestep>
       <coefficient name="Timestep">
@@ -48,7 +48,7 @@
           <rank name="Scalar" rank="0">
             <value name="WholeMesh">
               <constant>
-                <real_value rank="0">5.e-7</real_value>
+                <real_value rank="0">1.e-5</real_value>
               </constant>
             </value>
           </rank>
