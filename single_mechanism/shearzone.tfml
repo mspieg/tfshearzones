@@ -58,7 +58,7 @@
   </timestepping>
   <global_parameters>
     <ufl>
-      <string_value lines="20" type="code" language="python">edotv = A*(tau**n)*(d**-m)*exp(-Tstar/T)</string_value>
+      <string_value lines="20" type="code" language="python">edotv = A*(tau**n)*(d**m)*exp(-Tstar/T)</string_value>
     </ufl>
   </global_parameters>
   <system name="shearzone">
@@ -162,5 +162,117 @@
         <include_in_statistics/>
       </diagnostics>
     </field>
+    <coefficient name="invPe">
+      <ufl_symbol name="global">
+        <string_value lines="1">invPe</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">1.</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+      <comment>Inverse Pe number  invPe = \kappa/V0/L</comment>
+    </coefficient>
+    <coefficient name="DissipationNumber">
+      <ufl_symbol name="global">
+        <string_value lines="1">Di</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">1.</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+      <comment>Inverse Pe number  invPe = \kappa/V0/L</comment>
+    </coefficient>
+    <coefficient name="CoolingRate">
+      <ufl_symbol name="global">
+        <string_value lines="1">R</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">0.</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+      <comment>Inverse Pe number  invPe = \kappa/V0/L</comment>
+    </coefficient>
+    <coefficient name="A">
+      <ufl_symbol name="global">
+        <string_value lines="1">A</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">1.</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+      <comment>dimensionless pre-exponential in flow law</comment>
+    </coefficient>
+    <coefficient name="n">
+      <ufl_symbol name="global">
+        <string_value lines="1">n</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">3.5</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+      <comment>stress exponent</comment>
+    </coefficient>
+    <coefficient name="m">
+      <ufl_symbol name="global">
+        <string_value lines="1">m</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">-2.</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+      <comment>grainsize exponent</comment>
+    </coefficient>
+    <coefficient name="Tstar">
+      <ufl_symbol name="global">
+        <string_value lines="1">Tstar</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">1.</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+      <comment>dimensionless reference Temperature Tstar = Q/(RT_0)</comment>
+    </coefficient>
   </system>
 </terraferma_options>

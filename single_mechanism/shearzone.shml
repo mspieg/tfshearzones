@@ -15,7 +15,109 @@
         <string_value type="filename" lines="1">shearzone.tfml</string_value>
       </input_file>
       <run_when name="input_changed_or_output_missing"/>
-      <parameter_sweep/>
+      <parameter_sweep>
+        <parameter name="L">
+          <values>
+            <string_value lines="1">10.</string_value>
+          </values>
+          <comment>system size  \Omega = [-L,L],  size in m</comment>
+        </parameter>
+        <parameter name="edot0">
+          <values>
+            <string_value lines="1">1e-15</string_value>
+          </values>
+          <comment>boundary driven strain rate ( s^-1)  such that V0 = edot0*L</comment>
+        </parameter>
+        <parameter name="T0">
+          <values>
+            <string_value lines="1">923.</string_value>
+          </values>
+          <comment>Initial Temperature (in K)
+</comment>
+        </parameter>
+        <parameter name="G">
+          <values>
+            <string_value lines="1">1.e5</string_value>
+          </values>
+          <update>
+            <string_value lines="20" type="code" language="python">import libspud
+
+# Set some Dimensionless numbers and insert in tfml file
+
+# Fixed Problem parameters
+kappa = 1.e6 # thermal diffusivity m^2/s
+rho = 3300.   # Density of dunite kg/m^3
+cp  = 800.   # Heat capacity J kg^{-1} K^-1
+
+# derived quantities
+V0 = float(edot0)*float(L) # boundary velocity
+invPe = kappa/V0/float(L) # inverse Pe number
+Di = float(G)/float(T0)/rho/cp # dissipation number
+
+# set tfml options
+libspud.set_option("/system::shearzone/coefficient::invPe/type::Constant/rank::Scalar/value::WholeMesh/constant",invPe)
+libspud.set_option("/system::shearzone/coefficient::DissipationNumber/type::Constant/rank::Scalar/value::WholeMesh/constant",Di)
+</string_value>
+            <single_build/>
+          </update>
+          <comment>Elastic Shear Modulus (in MPa)  also used as a reference stress</comment>
+        </parameter>
+        <parameter name="R">
+          <values>
+            <string_value lines="1">0.</string_value>
+          </values>
+          <update>
+            <string_value lines="20" type="code" language="python">import libspud
+libspud.set_option("/system::shearzone/coefficient::CoolingRate/type::Constant/rank::Scalar/value::WholeMesh/constant",float(R))</string_value>
+            <single_build/>
+          </update>
+          <comment>Dimensionless thermal relaxation rate  R = r/edot0  gives cooling rate relateive to background strain rate.</comment>
+        </parameter>
+        <parameter name="d0">
+          <values>
+            <string_value lines="1">1.e4</string_value>
+          </values>
+          <comment>reference grain size in microns</comment>
+        </parameter>
+        <parameter name="mechanism">
+          <values>
+            <string_value lines="1">disGBS</string_value>
+          </values>
+          <update>
+            <string_value lines="20" type="code" language="python">import libspud
+if mechanism == 'disGBS':
+  A = 6500.    # MPa^{-3.5} microns^{2} s^{-1}
+  n = 3.5      # stress exponent
+  m = -2.      # grain-size exponent
+  Q = 400.     # Activation energy
+elif mechanism == 'diff':
+  A = 1.5e9    # MPa^{-1} microns^{3} s^{-1}
+  n = 1.       # stress exponent
+  m = -3.       # grain-size exponent
+  Q = 375.     # Activation energy
+elif mechanism == 'dis':
+  A = 1.1e5    # MPa^{-3.5} microns^{0} s^{-1}
+  n = 3.5      # stress exponent
+  m = 0.       # grain-size exponent
+  Q = 530.     # Activation energy
+else:
+  print 'Error, no mechanism: {0}'.format(mechanism)
+
+R = 8.314e-3 # Gas constant  
+Astar = A/float(edot0)*float(G)**n*float(d0)**m
+Tstar = Q/R/float(T0)
+
+libspud.set_option("/system::shearzone/coefficient::A/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
+libspud.set_option("/system::shearzone/coefficient::n/type::Constant/rank::Scalar/value::WholeMesh/constant",n)
+libspud.set_option("/system::shearzone/coefficient::m/type::Constant/rank::Scalar/value::WholeMesh/constant",m)
+libspud.set_option("/system::shearzone/coefficient::Tstar/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)
+</string_value>
+            <single_build/>
+          </update>
+          <comment>string describing creep mechanism
+Current options are disGBS, diff, disl creep</comment>
+        </parameter>
+      </parameter_sweep>
       <dependencies>
         <run name="Mesh">
           <input_file>
