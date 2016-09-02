@@ -29,7 +29,14 @@
         </degree>
       </element>
     </visualization>
-    <dump_periods/>
+    <dump_periods>
+      <visualization_period>
+        <real_value rank="0">.002</real_value>
+      </visualization_period>
+      <statistics_period_in_timesteps>
+        <integer_value rank="0">2</integer_value>
+      </statistics_period_in_timesteps>
+    </dump_periods>
     <detectors/>
   </io>
   <timestepping>
@@ -37,7 +44,7 @@
       <real_value rank="0">0.</real_value>
     </current_time>
     <finish_time>
-      <real_value rank="0">.01</real_value>
+      <real_value rank="0">1.</real_value>
     </finish_time>
     <timestep>
       <coefficient name="Timestep">
@@ -48,7 +55,7 @@
           <rank name="Scalar" rank="0">
             <value name="WholeMesh">
               <constant>
-                <real_value rank="0">1.e-5</real_value>
+                <real_value rank="0">1.e-4</real_value>
               </constant>
             </value>
           </rank>
