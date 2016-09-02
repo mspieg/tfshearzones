@@ -148,16 +148,25 @@ edot_total = edotv_i + (tau_i - tau_n)/dt</string_value>
             </degree>
           </element>
           <initial_condition type="initial_condition" name="WholeMesh">
-            <python rank="0">
-              <string_value lines="20" type="code" language="python">#FIXME:  this is butt ugly and should eventually be C++
-def val(x):
-  l=.01
-  if abs(x[0]) &lt;= l:
-    return .1
-  else: 
-    return 1.</string_value>
-              <comment>initial condition for grain-size...FIXME, this needs to be c++ to incorporate parameters</comment>
-            </python>
+            <cpp rank="0">
+              <members>
+                <string_value type="code" lines="20" language="cpp">double l,lambda,dsz;</string_value>
+              </members>
+              <initialization>
+                <string_value type="code" lines="20" language="cpp">GenericFunction_ptr l_ptr = system()-&gt;fetch_coeff("ShearzoneWidth")-&gt;genericfunction_ptr(time());
+GenericFunction_ptr lambda_ptr = system()-&gt;fetch_coeff("ShearzoneTaper")-&gt;genericfunction_ptr(time());
+GenericFunction_ptr dsz_ptr = system()-&gt;fetch_coeff("ShearzoneGrainsize")-&gt;genericfunction_ptr(time());
+
+l = double(*std::dynamic_pointer_cast&lt;dolfin::Constant&gt;(l_ptr));
+lambda = double(*std::dynamic_pointer_cast&lt;dolfin::Constant&gt;(lambda_ptr));
+dsz = double(*std::dynamic_pointer_cast&lt;dolfin::Constant&gt;(dsz_ptr));</string_value>
+              </initialization>
+              <eval>
+                <string_value type="code" lines="20" language="cpp">double H1  = 0.5*(std::tanh((x[0] + l)/lambda) + 1.);
+double H2 = 0.5*(std::tanh((x[0] - l)/lambda) + 1.);
+values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
+              </eval>
+            </cpp>
           </initial_condition>
         </rank>
       </type>
@@ -277,6 +286,54 @@ def val(x):
       </type>
       <diagnostics/>
       <comment>dimensionless reference Temperature Tstar = Q/(RT_0)</comment>
+    </coefficient>
+    <coefficient name="ShearzoneWidth">
+      <ufl_symbol name="global">
+        <string_value lines="1">l</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">.1</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+    </coefficient>
+    <coefficient name="ShearzoneTaper">
+      <ufl_symbol name="global">
+        <string_value lines="1">szlambda</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">.01</real_value>
+              <comment>taper width for edges of shear zone</comment>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+    </coefficient>
+    <coefficient name="ShearzoneGrainsize">
+      <ufl_symbol name="global">
+        <string_value lines="1">dsz</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">.1</real_value>
+              <comment>taper width for edges of shear zone</comment>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+      <comment>dimensionless grain-size in shear-zone</comment>
     </coefficient>
     <nonlinear_solver name="SNES">
       <type name="SNES">
