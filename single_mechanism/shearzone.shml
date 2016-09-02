@@ -24,7 +24,7 @@
         </parameter>
         <parameter name="edot0">
           <values>
-            <string_value lines="1">1e-15</string_value>
+            <string_value lines="1">1e-12</string_value>
           </values>
           <comment>boundary driven strain rate ( s^-1)  such that V0 = edot0*L</comment>
         </parameter>
@@ -54,6 +54,16 @@ V0 = float(edot0)*float(L) # boundary velocity
 invPe = kappa/V0/float(L) # inverse Pe number
 Di = float(G)/float(T0)/rho/cp # dissipation number
 
+s_per_year = 3600.*24.*365.25
+
+print
+print '**************** Scaling Parameters **********'
+print 'Edge velocity V0=',V0*s_per_year, 'm/yr'
+print '            1/Pe=',invPe
+print 'Dissipation # Di=',Di
+print '************************************************'
+print
+
 # set tfml options
 libspud.set_option("/system::shearzone/coefficient::invPe/type::Constant/rank::Scalar/value::WholeMesh/constant",invPe)
 libspud.set_option("/system::shearzone/coefficient::DissipationNumber/type::Constant/rank::Scalar/value::WholeMesh/constant",Di)
@@ -78,6 +88,28 @@ libspud.set_option("/system::shearzone/coefficient::CoolingRate/type::Constant/r
             <string_value lines="1">1.e4</string_value>
           </values>
           <comment>reference grain size in microns</comment>
+        </parameter>
+        <parameter name="dsz">
+          <values>
+            <string_value lines="1">.1</string_value>
+          </values>
+          <update>
+            <string_value type="code" lines="20" language="python">import libspud
+libspud.set_option("/system::shearzone/coefficient::ShearzoneGrainsize/type::Constant/rank::Scalar/value::WholeMesh/constant",float(dsz))</string_value>
+            <single_build/>
+          </update>
+          <comment>dimensionless grain-size in shear zone</comment>
+        </parameter>
+        <parameter name="l">
+          <values>
+            <string_value lines="1">.05</string_value>
+          </values>
+          <update>
+            <string_value lines="20" type="code" language="python">import libspud
+libspud.set_option("/system::shearzone/coefficient::ShearzoneWidth/type::Constant/rank::Scalar/value::WholeMesh/constant",float(l))</string_value>
+            <single_build/>
+          </update>
+          <comment>dimensionless shearzone half-width</comment>
         </parameter>
         <parameter name="mechanism">
           <values>
@@ -111,7 +143,12 @@ libspud.set_option("/system::shearzone/coefficient::A/type::Constant/rank::Scala
 libspud.set_option("/system::shearzone/coefficient::n/type::Constant/rank::Scalar/value::WholeMesh/constant",n)
 libspud.set_option("/system::shearzone/coefficient::m/type::Constant/rank::Scalar/value::WholeMesh/constant",m)
 libspud.set_option("/system::shearzone/coefficient::Tstar/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)
-</string_value>
+
+print '**************** Mechanism Parameters **********'
+print mechanism
+print 'A* =',Astar
+print 'T* =',Tstar
+print '************************************************'</string_value>
             <single_build/>
           </update>
           <comment>string describing creep mechanism
