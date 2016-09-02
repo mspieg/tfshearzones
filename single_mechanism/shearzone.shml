@@ -18,7 +18,7 @@
       <parameter_sweep>
         <parameter name="L">
           <values>
-            <string_value lines="1">10.</string_value>
+            <string_value lines="1">100.</string_value>
           </values>
           <comment>system size  \Omega = [-L,L],  size in m</comment>
         </parameter>
@@ -37,7 +37,7 @@
         </parameter>
         <parameter name="G">
           <values>
-            <string_value lines="1">1.e5</string_value>
+            <string_value lines="1">5.e4</string_value>
           </values>
           <update>
             <string_value lines="20" type="code" language="python">import libspud
@@ -45,7 +45,7 @@
 # Set some Dimensionless numbers and insert in tfml file
 
 # Fixed Problem parameters
-kappa = 1.e6 # thermal diffusivity m^2/s
+kappa = 1.e-6 # thermal diffusivity m^2/s
 rho = 3300.   # Density of dunite kg/m^3
 cp  = 800.   # Heat capacity J kg^{-1} K^-1
 
@@ -91,7 +91,7 @@ libspud.set_option("/system::shearzone/coefficient::CoolingRate/type::Constant/r
         </parameter>
         <parameter name="dsz">
           <values>
-            <string_value lines="1">.1</string_value>
+            <string_value lines="1">.01</string_value>
           </values>
           <update>
             <string_value type="code" lines="20" language="python">import libspud
@@ -102,14 +102,25 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneGrainsize/type::Con
         </parameter>
         <parameter name="l">
           <values>
-            <string_value lines="1">.05</string_value>
+            <string_value lines="1">0.01</string_value>
           </values>
           <update>
             <string_value lines="20" type="code" language="python">import libspud
 libspud.set_option("/system::shearzone/coefficient::ShearzoneWidth/type::Constant/rank::Scalar/value::WholeMesh/constant",float(l))</string_value>
             <single_build/>
           </update>
-          <comment>dimensionless shearzone half-width</comment>
+          <comment>dimensionless width of shear zone l/L</comment>
+        </parameter>
+        <parameter name="llam">
+          <values>
+            <string_value lines="1">0.001</string_value>
+          </values>
+          <update>
+            <string_value lines="20" type="code" language="python">import libspud
+libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constant/rank::Scalar/value::WholeMesh/constant",float(llam))</string_value>
+            <single_build/>
+          </update>
+          <comment>dimensionless width of shear zone taper lambda</comment>
         </parameter>
         <parameter name="mechanism">
           <values>
