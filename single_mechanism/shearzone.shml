@@ -18,7 +18,7 @@
       <parameter_sweep>
         <parameter name="L">
           <values>
-            <string_value lines="1">20.</string_value>
+            <string_value lines="1">25.</string_value>
           </values>
           <comment>system size  \Omega = [-L,L],  size in m</comment>
         </parameter>
@@ -48,7 +48,7 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constan
         </parameter>
         <parameter name="edot0">
           <values>
-            <string_value lines="1">1e-11</string_value>
+            <string_value lines="1">1.e-12 2e-12 5e-12</string_value>
           </values>
           <comment>boundary driven strain rate ( s^-1)  such that V0 = edot0*L</comment>
         </parameter>
