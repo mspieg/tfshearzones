@@ -61,6 +61,21 @@
           </rank>
         </type>
       </coefficient>
+      <adaptive>
+        <constraint name="HeatingRate">
+          <system name="HeatingRate"/>
+          <field name="dH"/>
+          <requested_maximum_value>
+            <real_value rank="0">0.01</real_value>
+          </requested_maximum_value>
+        </constraint>
+        <adapt_period_in_timesteps>
+          <integer_value rank="0">4</integer_value>
+        </adapt_period_in_timesteps>
+        <increase_tolerance>
+          <real_value rank="0">1.1</real_value>
+        </increase_tolerance>
+      </adaptive>
     </timestep>
   </timestepping>
   <global_parameters>
@@ -157,10 +172,10 @@ edot_total = edotv_i + (tau_i - tau_n)/dt</string_value>
           <initial_condition type="initial_condition" name="WholeMesh">
             <cpp rank="0">
               <members>
-                <string_value type="code" lines="20" language="cpp">double l,lambda,dsz;</string_value>
+                <string_value lines="20" type="code" language="cpp">double l,lambda,dsz;</string_value>
               </members>
               <initialization>
-                <string_value type="code" lines="20" language="cpp">GenericFunction_ptr l_ptr = system()-&gt;fetch_coeff("ShearzoneWidth")-&gt;genericfunction_ptr(time());
+                <string_value lines="20" type="code" language="cpp">GenericFunction_ptr l_ptr = system()-&gt;fetch_coeff("ShearzoneWidth")-&gt;genericfunction_ptr(time());
 GenericFunction_ptr lambda_ptr = system()-&gt;fetch_coeff("ShearzoneTaper")-&gt;genericfunction_ptr(time());
 GenericFunction_ptr dsz_ptr = system()-&gt;fetch_coeff("ShearzoneGrainsize")-&gt;genericfunction_ptr(time());
 
@@ -169,7 +184,7 @@ lambda = double(*std::dynamic_pointer_cast&lt;dolfin::Constant&gt;(lambda_ptr));
 dsz = double(*std::dynamic_pointer_cast&lt;dolfin::Constant&gt;(dsz_ptr));</string_value>
               </initialization>
               <eval>
-                <string_value type="code" lines="20" language="cpp">double H1  = 0.5*(std::tanh((x[0] + l)/lambda) + 1.);
+                <string_value lines="20" type="code" language="cpp">double H1  = 0.5*(std::tanh((x[0] + l)/lambda) + 1.);
 double H2 = 0.5*(std::tanh((x[0] - l)/lambda) + 1.);
 values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
               </eval>
@@ -345,7 +360,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
     <nonlinear_solver name="SNES">
       <type name="SNES">
         <form name="Residual" rank="0">
-          <string_value type="code" lines="20" language="python">K = 1.
+          <string_value lines="20" type="code" language="python">K = 1.
 F_tau = tau_t*(tau_i - tau_n)*dx  + dt*tau_t*edotv_i*dx - dt*(tau_t*ds(2) + tau_t*ds(1))
 F_T = T_t*(T_i - T_n)*dx + dt*invPe*K*inner(grad(T_t),grad(T_i))*dx
 F_T += -dt*Di*T_t*tau_i*edotv_i*dx - dt*T_t*R*(1. - T_i)*dx
@@ -357,7 +372,7 @@ F = F_tau + F_T + F_d</string_value>
           </ufl_symbol>
         </form>
         <form name="Jacobian" rank="1">
-          <string_value type="code" lines="20" language="python">J = derivative(F,us_i,us_a)</string_value>
+          <string_value lines="20" type="code" language="python">J = derivative(F,us_i,us_a)</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">J</string_value>
           </ufl_symbol>
@@ -390,7 +405,7 @@ F = F_tau + F_T + F_d</string_value>
       <solve name="in_timeloop"/>
     </nonlinear_solver>
   </system>
-  <system name="strainrate">
+  <system name="total_strainrate">
     <mesh name="Mesh"/>
     <ufl_symbol name="global">
       <string_value lines="1">ue</string_value>
@@ -431,6 +446,154 @@ F = F_tau + F_T + F_d</string_value>
         </form>
         <form name="Jacobian" rank="1">
           <string_value lines="20" type="code" language="python">J = derivative(F,ue_i,ue_a)</string_value>
+          <ufl_symbol name="solver">
+            <string_value lines="1">J</string_value>
+          </ufl_symbol>
+        </form>
+        <quadrature_rule name="default"/>
+        <snes_type name="ls">
+          <ls_type name="cubic"/>
+          <convergence_test name="default"/>
+        </snes_type>
+        <relative_error>
+          <real_value rank="0">1.e-7</real_value>
+        </relative_error>
+        <absolute_error>
+          <real_value rank="0">1.e-10</real_value>
+        </absolute_error>
+        <max_iterations>
+          <integer_value rank="0">20</integer_value>
+        </max_iterations>
+        <monitors>
+          <residual/>
+        </monitors>
+        <linear_solver>
+          <iterative_method name="preonly"/>
+          <preconditioner name="lu">
+            <factorization_package name="mumps"/>
+          </preconditioner>
+        </linear_solver>
+        <never_ignore_solver_failures/>
+      </type>
+      <solve name="with_diagnostics"/>
+    </nonlinear_solver>
+    <comment>projects total strainrate field for output</comment>
+  </system>
+  <system name="viscous_strainrate">
+    <mesh name="Mesh"/>
+    <ufl_symbol name="global">
+      <string_value lines="1">uev</string_value>
+    </ufl_symbol>
+    <field name="strainrate">
+      <ufl_symbol name="global">
+        <string_value lines="1">edotvp</string_value>
+      </ufl_symbol>
+      <type name="Function">
+        <rank name="Scalar" rank="0">
+          <element name="P1">
+            <family>
+              <string_value lines="1">CG</string_value>
+            </family>
+            <degree>
+              <integer_value rank="0">1</integer_value>
+            </degree>
+          </element>
+          <initial_condition type="initial_condition" name="WholeMesh">
+            <constant>
+              <real_value rank="0">0.</real_value>
+            </constant>
+          </initial_condition>
+        </rank>
+      </type>
+      <diagnostics>
+        <include_in_visualization/>
+        <include_in_statistics/>
+      </diagnostics>
+    </field>
+    <nonlinear_solver name="SNES">
+      <type name="SNES">
+        <form name="Residual" rank="0">
+          <string_value lines="20" type="code" language="python">F = edotvp_t*(edotvp_i - edotv_i)*dx</string_value>
+          <ufl_symbol name="solver">
+            <string_value lines="1">F</string_value>
+          </ufl_symbol>
+        </form>
+        <form name="Jacobian" rank="1">
+          <string_value lines="20" type="code" language="python">J = derivative(F,uev_i,uev_a)</string_value>
+          <ufl_symbol name="solver">
+            <string_value lines="1">J</string_value>
+          </ufl_symbol>
+        </form>
+        <quadrature_rule name="default"/>
+        <snes_type name="ls">
+          <ls_type name="cubic"/>
+          <convergence_test name="default"/>
+        </snes_type>
+        <relative_error>
+          <real_value rank="0">1.e-7</real_value>
+        </relative_error>
+        <absolute_error>
+          <real_value rank="0">1.e-10</real_value>
+        </absolute_error>
+        <max_iterations>
+          <integer_value rank="0">20</integer_value>
+        </max_iterations>
+        <monitors>
+          <residual/>
+        </monitors>
+        <linear_solver>
+          <iterative_method name="preonly"/>
+          <preconditioner name="lu">
+            <factorization_package name="mumps"/>
+          </preconditioner>
+        </linear_solver>
+        <never_ignore_solver_failures/>
+      </type>
+      <solve name="with_diagnostics"/>
+    </nonlinear_solver>
+    <comment>projects total strainrate field for output</comment>
+  </system>
+  <system name="HeatingRate">
+    <mesh name="Mesh"/>
+    <ufl_symbol name="global">
+      <string_value lines="1">uH</string_value>
+    </ufl_symbol>
+    <field name="dH">
+      <ufl_symbol name="global">
+        <string_value lines="1">dH</string_value>
+      </ufl_symbol>
+      <type name="Function">
+        <rank name="Scalar" rank="0">
+          <element name="P0">
+            <family>
+              <string_value lines="1">DG</string_value>
+            </family>
+            <degree>
+              <integer_value rank="0">0</integer_value>
+            </degree>
+          </element>
+          <initial_condition type="initial_condition" name="WholeMesh">
+            <constant>
+              <real_value rank="0">0.</real_value>
+            </constant>
+          </initial_condition>
+        </rank>
+      </type>
+      <diagnostics>
+        <include_in_visualization/>
+        <include_in_statistics/>
+      </diagnostics>
+    </field>
+    <nonlinear_solver name="SNES">
+      <type name="SNES">
+        <form name="Residual" rank="0">
+          <string_value lines="20" type="code" language="python">F = dH_t*(dH_i - dt*Di*abs(tau_i*edotv_i))*dx</string_value>
+          <ufl_symbol name="solver">
+            <string_value lines="1">F</string_value>
+          </ufl_symbol>
+        </form>
+        <form name="Jacobian" rank="1">
+          <string_value lines="20" type="code" language="python">J = derivative(F,uH_i,uH_a)</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">J</string_value>
           </ufl_symbol>
