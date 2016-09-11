@@ -1,13 +1,13 @@
 l = ${h_on_L};
-cl1 = 10*${cl_min};
-cl2 = 4*${cl_min};
+cl1 = 50*${cl_min};
+cl2 = 5*${cl_min};
 cl3 = ${cl_min};
 Point(1) = {-1., 0., 0, cl1};
-Point(2) = {-4.*l, 0., 0, cl2};
+Point(2) = {-5.*l, 0., 0, cl2};
 Point(3) = {-2.*l, 0., 0, cl3};
 Point(4) = { 0., 0., 0, cl3};
 Point(5) = {2.*l, 0., 0, cl3};
-Point(6) = {4*l, 0., 0,cl2};
+Point(6) = {5.*l, 0., 0,cl2};
 Point(7) = {1., 0., 0, cl1};
 Line(1) = {1, 2};
 Line(2) = {2, 3};

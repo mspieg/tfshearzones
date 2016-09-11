@@ -17,7 +17,7 @@
   </geometry>
   <io>
     <output_base_name>
-      <string_value lines="1">shearzone_outs</string_value>
+      <string_value lines="1">shearzone_out</string_value>
     </output_base_name>
     <visualization>
       <element name="P2">
@@ -36,6 +36,9 @@
       <statistics_period_in_timesteps>
         <integer_value rank="0">2</integer_value>
       </statistics_period_in_timesteps>
+      <steady_state_period_in_timesteps>
+        <integer_value rank="0">10</integer_value>
+      </steady_state_period_in_timesteps>
     </dump_periods>
     <detectors/>
   </io>
@@ -115,6 +118,11 @@ edot_total = edotv_i + (tau_i - tau_n)/dt</string_value>
       <diagnostics>
         <include_in_visualization/>
         <include_in_statistics/>
+        <include_in_steady_state>
+          <norm>
+            <string_value lines="1">linf</string_value>
+          </norm>
+        </include_in_steady_state>
       </diagnostics>
     </field>
     <field name="Temperature">
@@ -153,6 +161,11 @@ edot_total = edotv_i + (tau_i - tau_n)/dt</string_value>
       <diagnostics>
         <include_in_visualization/>
         <include_in_statistics/>
+        <include_in_steady_state>
+          <norm>
+            <string_value lines="1">l1</string_value>
+          </norm>
+        </include_in_steady_state>
       </diagnostics>
     </field>
     <field name="Grainsize">
@@ -434,6 +447,11 @@ F = F_tau + F_T + F_d</string_value>
       <diagnostics>
         <include_in_visualization/>
         <include_in_statistics/>
+        <include_in_steady_state>
+          <norm>
+            <string_value lines="1">l1</string_value>
+          </norm>
+        </include_in_steady_state>
       </diagnostics>
     </field>
     <nonlinear_solver name="SNES">
