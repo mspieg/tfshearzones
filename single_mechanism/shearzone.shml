@@ -48,7 +48,7 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constan
         </parameter>
         <parameter name="edot0">
           <values>
-            <string_value lines="1">7.e-12 8.e-12 9.e-12 1.e-11 2.e-11</string_value>
+            <string_value lines="1">8.e-12 9.e-12 1.e-11 1.05e-11 1.0525e-11 1.055e-11 1.0575e-11 1.06e-11 1.1e-11 1.2e-11</string_value>
             <comment>7.e-12 8.e-12 9.e-12 1.e-11 2.e-11</comment>
           </values>
           <comment>boundary driven strain rate ( s^-1)  such that V0 = edot0*L</comment>
@@ -262,7 +262,7 @@ for edot in edot0:
   pl.hold(True)
 
 pl.grid()
-pl.ylim(ymax=0.2)
+pl.ylim(ymax=0.17)
 pl.legend(loc='best')
 pl.xlabel('Time')
 pl.ylabel('Shear Stress (non-dim)')
