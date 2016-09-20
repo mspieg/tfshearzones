@@ -374,7 +374,8 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
       <type name="SNES">
         <form name="Residual" rank="0">
           <string_value lines="20" type="code" language="python">K = 1.
-F_tau = tau_t*(tau_i - tau_n)*dx  + dt*tau_t*edotv_i*dx - dt*(tau_t*ds(2) + tau_t*ds(1))
+V0 = 0.5
+F_tau = tau_t*(tau_i - tau_n)*dx  + dt*tau_t*edotv_i*dx - dt*(tau_t*V0*ds(2) + tau_t*V0*ds(1))
 F_T = T_t*(T_i - T_n)*dx + dt*invPe*K*inner(grad(T_t),grad(T_i))*dx
 F_T += -dt*Di*T_t*tau_i*edotv_i*dx - dt*T_t*R*(1. - T_i)*dx
 F_d = d_t*(d_i - d_n)*dx
