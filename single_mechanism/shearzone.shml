@@ -48,16 +48,19 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constan
         </parameter>
         <parameter name="edot0">
           <values>
-            <string_value lines="1">1.e-11 1.05e-11 1.0525e-11 1.055e-11 1.0575e-11</string_value>
-            <comment>8.e-12 9.e-12 1.e-11 1.05e-11 1.0525e-11 1.055e-11 1.0575e-11 1.06e-11 1.1e-11 1.2e-11</comment>
+            <string_value lines="1">6.2e-12 6.4e-12 6.6e-12 6.8e-12</string_value>
+            <comment>5.e-12 6.e-12 7.e-12 8.e-12 9.e-12
+
+
+8.e-12 9.e-12 1.e-11 1.05e-11 1.0525e-11 1.055e-11 1.0575e-11 1.06e-11 1.1e-11 1.2e-11</comment>
           </values>
           <comment>boundary driven strain rate ( s^-1)  such that V0 = edot0*L</comment>
         </parameter>
         <parameter name="T0">
           <values>
-            <string_value lines="1">923.</string_value>
+            <string_value lines="1">650.</string_value>
           </values>
-          <comment>Initial Temperature (in K)</comment>
+          <comment>Initial Temperature (in C)</comment>
         </parameter>
         <parameter name="G">
           <values>
@@ -74,15 +77,16 @@ rho = 3300.   # Density of dunite kg/m^3
 cp  = 800.   # Heat capacity J kg^{-1} K^-1
 
 # derived quantities
-V0 = float(edot0)*float(L) # boundary velocity
+T0_K = float(T0) + 273.
+V0 = 2.*float(edot0)*float(L) # boundary velocity scale
 invPe = min(kappa/V0/float(L),1.e3) # inverse Pe number
-Di = float(G)*1.e6/float(T0)/rho/cp # dissipation number (note G in MPa)
+Di = float(G)*1.e6/float(T0_K)/rho/cp # dissipation number (note G in MPa)
 
 s_per_year = 3600.*24.*365.25
 
 print
 print '**************** Scaling Parameters **********'
-print 'Edge velocity V0=',V0*s_per_year, 'm/yr'
+print 'Scale velocity V0=',V0*s_per_year, 'm/yr'
 print '            1/Pe=',invPe
 print 'Dissipation # Di=',Di
 print '************************************************'
@@ -149,7 +153,8 @@ else:
 
 R = 8.314e-3 # Gas constant  
 Astar = A/float(edot0)*float(G)**n*float(d0)**m
-Tstar = Q/R/float(T0)
+T0_K = float(T0) + 273.
+Tstar = Q/R/float(T0_K)
 
 libspud.set_option("/system::shearzone/coefficient::A/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
 libspud.set_option("/system::shearzone/coefficient::n/type::Constant/rank::Scalar/value::WholeMesh/constant",n)
@@ -246,25 +251,26 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as pl
 
 edot0 = time.parameters['edot0']
+G = float(time.parameters['G'][0])
 #print time.parameters
-print edot0
+print edot0,G
 
 pl.figure()
 for edot in edot0:
   print edot
   slice = {'edot0':edot}
   t = time[slice]
-  tau = tau_max[slice]
+  tau = G*tau_max[slice]
   #print t[:10]
   #print tau[:10]
-  pl.plot(t,tau,label='{0}'.format(edot))
+  pl.plot(t,tau,label='$\dot\epsilon_0=${0}'.format(edot))
   pl.hold(True)
 
 pl.grid()
-pl.ylim(ymax=0.17)
+pl.ylim(ymax=0.17*G)
 pl.legend(loc='best')
-pl.xlabel('Time')
-pl.ylabel('Shear Stress (non-dim)')
+pl.xlabel('Background Strain (non-dim time)')
+pl.ylabel('Shear Stress (MPa)')
 pl.savefig('Stress.pdf')</string_value>
     </test>
     <test name="PlotT">
@@ -274,23 +280,26 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as pl
 
 edot0 = time.parameters['edot0']
+T0 = float(time.parameters['T0'][0])
+T0_K = T0 + 273.
+
 #print time.parameters
-print edot0
+print edot0, T0
 
 pl.figure()
 for edot in edot0:
   print edot
   slice = {'edot0':edot}
   t = time[slice]
-  T = T_max[slice]
-  pl.plot(t,T,label='{0}'.format(edot))
+  T = T0_K*T_max[slice] - 273.
+  pl.plot(t,T,label='$\dot\epsilon_0$={0}'.format(edot))
   pl.hold(True)
 
 pl.grid()
-pl.ylim(ymax=1.05)
+pl.ylim(ymax=1.05*T0_K -273.)
 pl.legend(loc='best')
-pl.xlabel('Time')
-pl.ylabel('Temperature ($T/T_0$)')
+pl.xlabel('Background Strain (non-dim time)')
+pl.ylabel('Temperature ($^\circ$C)')
 pl.savefig('Temperature.pdf')</string_value>
     </test>
     <test name="PlotStrainRate">
@@ -311,13 +320,13 @@ for edot in edot0:
   edotmax = edot_max[slice]
   #print t[:10]
   #print tau[:10]
-  pl.semilogy(t,edotmax,label='{0}'.format(edot))
+  pl.semilogy(t,edotmax,label='$\dot\epsilon_0=${0}'.format(edot))
   pl.hold(True)
 
 pl.grid()
 pl.ylim(ymax=1.e4)
 pl.legend(loc='best')
-pl.xlabel('Time')
+pl.xlabel('Background Strain (non-dim Time)')
 pl.ylabel('Maximum Strain Rate (non-dim)')
 pl.savefig('StrainRate.pdf')</string_value>
     </test>
