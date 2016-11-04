@@ -411,7 +411,7 @@ F = F_tau + F_T + F_d</string_value>
         <linear_solver>
           <iterative_method name="preonly"/>
           <preconditioner name="lu">
-            <factorization_package name="mumps"/>
+            <factorization_package name="umfpack"/>
           </preconditioner>
         </linear_solver>
         <never_ignore_solver_failures/>
@@ -489,7 +489,7 @@ F = F_tau + F_T + F_d</string_value>
         <linear_solver>
           <iterative_method name="preonly"/>
           <preconditioner name="lu">
-            <factorization_package name="mumps"/>
+            <factorization_package name="umfpack"/>
           </preconditioner>
         </linear_solver>
         <never_ignore_solver_failures/>
@@ -563,7 +563,7 @@ F = F_tau + F_T + F_d</string_value>
         <linear_solver>
           <iterative_method name="preonly"/>
           <preconditioner name="lu">
-            <factorization_package name="mumps"/>
+            <factorization_package name="umfpack"/>
           </preconditioner>
         </linear_solver>
         <never_ignore_solver_failures/>
@@ -637,7 +637,7 @@ F = F_tau + F_T + F_d</string_value>
         <linear_solver>
           <iterative_method name="preonly"/>
           <preconditioner name="lu">
-            <factorization_package name="mumps"/>
+            <factorization_package name="umfpack"/>
           </preconditioner>
         </linear_solver>
         <never_ignore_solver_failures/>
