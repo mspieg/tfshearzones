@@ -48,8 +48,9 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constan
         </parameter>
         <parameter name="edot0">
           <values>
-            <string_value lines="1">6.2e-12 6.4e-12 6.6e-12 6.8e-12</string_value>
-            <comment>5.e-12 6.e-12 7.e-12 8.e-12 9.e-12
+            <string_value lines="1">6.2e-12 6.4e-12 6.6e-12 6.8e-12 6.9e-12 6.95e-12</string_value>
+            <comment>6.2e-12 6.4e-12 6.6e-12 6.8e-12 6.9e12 6.95e12
+5.e-12 6.e-12 7.e-12 8.e-12 9.e-12
 
 
 8.e-12 9.e-12 1.e-11 1.05e-11 1.0525e-11 1.055e-11 1.0575e-11 1.06e-11 1.1e-11 1.2e-11</comment>
@@ -125,7 +126,7 @@ libspud.set_option("/system::shearzone/coefficient::CoolingRate/type::Constant/r
 libspud.set_option("/system::shearzone/coefficient::ShearzoneGrainsize/type::Constant/rank::Scalar/value::WholeMesh/constant",float(dsz)/float(d0))</string_value>
             <single_build/>
           </update>
-          <comment> grain-size in shear zone in microns</comment>
+          <comment>grain-size in shear zone in microns</comment>
         </parameter>
         <parameter name="mechanism">
           <values>
@@ -296,7 +297,7 @@ for edot in edot0:
   pl.hold(True)
 
 pl.grid()
-pl.ylim(ymax=1.05*T0_K -273.)
+pl.ylim(ymin=.99*T0_K -273,ymax=1.09*T0_K -273.)
 pl.legend(loc='best')
 pl.xlabel('Background Strain (non-dim time)')
 pl.ylabel('Temperature ($^\circ$C)')
