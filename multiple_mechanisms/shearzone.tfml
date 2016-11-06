@@ -85,13 +85,19 @@
     <ufl>
       <string_value lines="20" type="code" language="python">edotv_i = ( Adiff*(tau_i**ndiff)*(d_i**mdiff)*exp(-Tstardiff/T_i) 
   + Adisl*(tau_i**ndisl)*(d_i**mdisl)*exp(-Tstardisl/T_i) 
-  + AdisGBS*(tau_i**ndisGBS)*(d_i**mdisGBS)*exp(-TstardisGBS/T_i) )
+  + AdisGBS*(tau_i**ndisGBS)*(d_i**mdisGBS)*exp(-TstardisGBS/T_i) 
+  + Apeierls*(1. - Bpeierls*tau_i)**2*exp(-Tstarpeierls/T_i) )
+
 
 edotv_n = ( Adiff*(tau_n**ndiff)*(d_n**mdiff)*exp(-Tstardiff/T_n) 
   + Adisl*(tau_n**ndisl)*(d_n**mdisl)*exp(-Tstardisl/T_n) 
-  + AdisGBS*(tau_n**ndisGBS)*(d_n**mdisGBS)*exp(-TstardisGBS/T_n) )
-  
-edot_total = edotv_i + (tau_i - tau_n)/dt</string_value>
+  + AdisGBS*(tau_n**ndisGBS)*(d_n**mdisGBS)*exp(-TstardisGBS/T_n) 
+  + Apeierls*(1. - Bpeierls*tau_n)**2*exp(-Tstarpeierls/T_n) )
+
+
+
+edot_total = edotv_i + (tau_i - tau_n)/dt
+</string_value>
     </ufl>
   </global_parameters>
   <system name="shearzone">
@@ -472,6 +478,53 @@ vector valued for three flow laws
     <coefficient name="TstardisGBS">
       <ufl_symbol name="global">
         <string_value lines="1">TstardisGBS</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">1.</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+      <comment>dimensionless reference Temperature Tstar = Q/(RT_0)</comment>
+    </coefficient>
+    <coefficient name="Apeierls">
+      <ufl_symbol name="global">
+        <string_value lines="1">Apeierls</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">0.</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+    </coefficient>
+    <coefficient name="Bpeierls">
+      <ufl_symbol name="global">
+        <string_value lines="1">Bpeierls</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">1.</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+      <comment>dimensionless reference Temperature Tstar = Q/(RT_0)</comment>
+    </coefficient>
+    <coefficient name="Tstarpeierls">
+      <ufl_symbol name="global">
+        <string_value lines="1">Tstarpeierls</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
