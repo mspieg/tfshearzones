@@ -47,7 +47,7 @@
       <real_value rank="0">0.</real_value>
     </current_time>
     <finish_time>
-      <real_value rank="0">0.5</real_value>
+      <real_value rank="0">0.2</real_value>
     </finish_time>
     <timestep>
       <coefficient name="Timestep">
@@ -69,7 +69,7 @@
           <system name="HeatingRate"/>
           <field name="dH"/>
           <requested_maximum_value>
-            <real_value rank="0">0.05</real_value>
+            <real_value rank="0">0.1</real_value>
           </requested_maximum_value>
         </constraint>
         <adapt_period_in_timesteps>
@@ -96,8 +96,7 @@ edotv_n = ( Adiff*(tau_n**ndiff)*(d_n**mdiff)*exp(-Tstardiff/T_n)
 
 
 
-edot_total = edotv_i + (tau_i - tau_n)/dt
-</string_value>
+edot_total = edotv_i + (tau_i - tau_n)/dt</string_value>
     </ufl>
   </global_parameters>
   <system name="shearzone">
