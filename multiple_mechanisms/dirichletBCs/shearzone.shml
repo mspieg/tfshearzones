@@ -48,12 +48,8 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constan
         </parameter>
         <parameter name="edot0">
           <values>
-            <string_value lines="1">1.e-13 2e-13 5e-13 1e-12 2e-12 5e-12</string_value>
-            <comment>6.2e-12 6.4e-12 6.6e-12 6.8e-12 6.9e12 6.95e12
-5.e-12 6.e-12 7.e-12 8.e-12 9.e-12
-
-
-8.e-12 9.e-12 1.e-11 1.05e-11 1.0525e-11 1.055e-11 1.0575e-11 1.06e-11 1.1e-11 1.2e-11</comment>
+            <string_value lines="1">4.8e-12  4.84e-12  4.9e-12 5e-12</string_value>
+            <comment>1.e-13 2e-13 5e-13 1e-12 2e-12 3e-12 4e-12  4.2e-12 4.4e-12 4.6e-12 4.8e-12 4.84e-12  4.88e-12 4.9e-12 5e-12</comment>
           </values>
           <comment>boundary driven strain rate ( s^-1)  such that V0 = 2*edot0*L</comment>
         </parameter>
@@ -102,7 +98,7 @@ libspud.set_option("/system::shearzone/coefficient::DissipationNumber/type::Cons
         </parameter>
         <parameter name="R">
           <values>
-            <string_value lines="1">0.</string_value>
+            <string_value lines="1">10.</string_value>
           </values>
           <update>
             <string_value lines="20" type="code" language="python">import libspud
@@ -180,9 +176,7 @@ if 'peierls' in mechs:
   print 'using Peierls low-T plasticity : A* = {0}, B* = {1}, T* = {2}'.format(Astar,Bstar,Tstar)
   libspud.set_option("/system::shearzone/coefficient::Apeierls/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
   libspud.set_option("/system::shearzone/coefficient::Bpeierls/type::Constant/rank::Scalar/value::WholeMesh/constant",Bstar)
-  libspud.set_option("/system::shearzone/coefficient::Tstarpeierls/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)
-    
-  </string_value>
+  libspud.set_option("/system::shearzone/coefficient::Tstarpeierls/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)</string_value>
             <single_build/>
           </update>
           <comment>string describing creep mechanisms
@@ -192,7 +186,7 @@ Current options are diff, disl, disGBS and peierls creep</comment>
       <dependencies>
         <run name="Mesh">
           <input_file>
-            <string_value lines="1" type="filename">../mesh/mesh_template.geo</string_value>
+            <string_value lines="1" type="filename">../../mesh/mesh_template.geo</string_value>
           </input_file>
           <run_when name="input_changed_or_output_missing"/>
           <parameter_sweep>
@@ -313,7 +307,7 @@ for edot in edot0:
   pl.hold(True)
 
 pl.grid()
-pl.ylim(ymin=.99*T0_K -273,ymax=1.09*T0_K -273.)
+pl.ylim(ymin=.99*T0_K -273,ymax=1.2*T0_K -273.)
 pl.legend(loc='best')
 pl.xlabel('Background Strain (non-dim time)')
 pl.ylabel('Temperature ($^\circ$C)')
@@ -341,7 +335,7 @@ for edot in edot0:
   pl.hold(True)
 
 pl.grid()
-pl.ylim(ymax=1.e4)
+pl.ylim(ymin=1.,ymax=1.e6)
 pl.legend(loc='best')
 pl.xlabel('Background Strain (non-dim Time)')
 pl.ylabel('Maximum Strain Rate (non-dim)')
