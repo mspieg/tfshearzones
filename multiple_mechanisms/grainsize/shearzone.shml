@@ -48,8 +48,8 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constan
         </parameter>
         <parameter name="edot0">
           <values>
-            <string_value lines="1">1.e-14 1.e-13 1.e-12 </string_value>
-            <comment>1.e-13 2e-13 5e-13 1e-12 2e-12 3e-12 4e-12  4.2e-12 4.4e-12 4.6e-12 4.8e-12 4.84e-12  4.88e-12 4.9e-12 5e-12</comment>
+            <string_value lines="1">1.e-11 1.e-10 1.e-9 1.e-8</string_value>
+            <comment>1.e-14 1.e-13 1.e-12</comment>
           </values>
           <comment>boundary driven strain rate ( s^-1)  such that V0 = 2*edot0*L</comment>
         </parameter>
@@ -184,7 +184,7 @@ Current options are diff, disl, disGBS and peierls creep</comment>
         </parameter>
         <parameter name="growthmodel">
           <values>
-            <string_value lines="1">p2</string_value>
+            <string_value lines="1">p3</string_value>
           </values>
           <update>
             <string_value lines="20" type="code" language="python">import libspud
@@ -194,20 +194,19 @@ T0_K = float(T0) + 273.
 
 if 'p2' in growthmodel:
   A = 1.8e8    # Pre-exponential
-  p = 2.       # stress exponent
-  m = -3.       # grain-size exponent
+  p = 2.       # grainsize  exponent
   Q = 300.     # Activation energy
-  Astar = A/float(edot0)*p*float(d0)**(-p)
+  Astar = A/float(edot0)/p*float(d0)**(-p)
   Tstar = Q/R/float(T0_K)
   print 'using K&amp;H p2 model :p={0}, A* = {1}, T* = {2}'.format(p,Astar,Tstar)
   libspud.set_option("/system::shearzone/coefficient::A_d/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
   libspud.set_option("/system::shearzone/coefficient::Tstard/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)
   libspud.set_option("/system::shearzone/coefficient::pd/type::Constant/rank::Scalar/value::WholeMesh/constant",(1.-p))
 elif 'p3' in growthmodel:
-  A = 1.5e5    # Pre-exponential
-  p = 3.       # stress exponent
+  A = 1.5e13    # Pre-exponential (microns^p)
+  p = 3.       # grain-growth exponent
   Q = 350.     # Activation energy
-  Astar = A/float(edot0)*p*float(d0)**(-p)
+  Astar = A/float(edot0)/p*float(d0)**(-p)
   Tstar = Q/R/float(T0_K)
   print 'using Janelles p3 model :p={0}, A* = {1}, T* = {2}'.format(p,Astar,Tstar)
   libspud.set_option("/system::shearzone/coefficient::A_d/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
@@ -301,6 +300,12 @@ tau_max = stat["shearzone"]["Stress"]["max"]</string_value>
           <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
 edot_max = stat["total_strainrate"]["strainrate"]["max"]</string_value>
+          <comment>maximum shear stress</comment>
+        </variable>
+        <variable name="T_min">
+          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+stat = parser("shearzone_out.stat")
+T_min = stat["shearzone"]["Temperature"]["min"]</string_value>
           <comment>maximum shear stress</comment>
         </variable>
         <variable name="T_max">
@@ -398,16 +403,20 @@ T0_K = T0 + 273.
 print edot0, T0
 
 pl.figure()
+color = iter(['r','g','b','k','y','c','m'])
 for edot in edot0:
   print edot
   slice = {'edot0':edot}
   t = time[slice]
-  T = T0_K*T_max[slice] - 273.
-  pl.plot(t,T,label='$\dot\epsilon_0$={0}'.format(edot))
+  Tmax = T0_K*T_max[slice] - 273.
+  Tmin = T0_K*T_min[slice] - 273.
+  c = next(color)
+  pl.plot(t,Tmax,'-'+c,label='Tmax:$\dot\epsilon_0$={0}'.format(edot))
   pl.hold(True)
-
+  pl.plot(t,Tmin,'--'+c,label='Tmin:$\dot\epsilon_0$={0}'.format(edot))
+  
 pl.grid()
-pl.ylim(ymin=.99*T0_K -273,ymax=1.05*T0_K -273.)
+pl.ylim(ymax=1.05*T0_K -273.)
 pl.legend(loc='best')
 pl.xlabel('Background Strain (non-dim time)')
 pl.ylabel('Temperature ($^\circ$C)')
