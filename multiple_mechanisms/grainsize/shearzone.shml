@@ -237,7 +237,7 @@ Current options are p2, p3 and none</comment>
         </parameter>
         <parameter name="lambda_d">
           <values>
-            <string_value lines="1">10.</string_value>
+            <string_value lines="1">1.</string_value>
           </values>
           <update>
             <string_value lines="20" type="code" language="python">import libspud
@@ -327,6 +327,30 @@ stat = parser("shearzone_out.stat")
 d_min = stat["shearzone"]["Grainsize"]["min"]</string_value>
           <comment>maximum shear stress</comment>
         </variable>
+        <variable name="edot_diff_max">
+          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+stat = parser("shearzone_out.stat")
+edot_diff_max = stat["edot_diffp"]["edotdiffp"]["max"]</string_value>
+          <comment>maximum shear stress</comment>
+        </variable>
+        <variable name="edot_disl_max">
+          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+stat = parser("shearzone_out.stat")
+edot_disl_max = stat["edot_dislp"]["edotdislp"]["max"]</string_value>
+          <comment>maximum shear stress</comment>
+        </variable>
+        <variable name="edot_disGBS_max">
+          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+stat = parser("shearzone_out.stat")
+edot_disGBS_max = stat["edot_disGBSp"]["edotdisGBSp"]["max"]</string_value>
+          <comment>maximum shear stress</comment>
+        </variable>
+        <variable name="edot_peierls_max">
+          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+stat = parser("shearzone_out.stat")
+edot_peierls_max = stat["edot_peierlsp"]["edotpeierlsp"]["max"]</string_value>
+          <comment>maximum shear stress</comment>
+        </variable>
       </variables>
     </simulation>
   </simulations>
@@ -354,7 +378,7 @@ for edot in edot0:
   pl.hold(True)
 
 pl.grid()
-pl.ylim(ymax=0.17*G)
+pl.ylim(ymax=0.05*G)
 pl.legend(loc='best')
 pl.xlabel('Background Strain (non-dim time)')
 pl.ylabel('Shear Stress (MPa)')
@@ -383,7 +407,7 @@ for edot in edot0:
   pl.hold(True)
 
 pl.grid()
-pl.ylim(ymin=.99*T0_K -273,ymax=1.2*T0_K -273.)
+pl.ylim(ymin=.99*T0_K -273,ymax=1.05*T0_K -273.)
 pl.legend(loc='best')
 pl.xlabel('Background Strain (non-dim time)')
 pl.ylabel('Temperature ($^\circ$C)')
@@ -430,6 +454,7 @@ G = float(time.parameters['G'][0])
 print edot0
 
 pl.figure()
+color = iter(['r','g','b','k','y','c','m'])
 for edot in edot0:
   print edot
   slice = {'edot0':edot}
@@ -438,19 +463,52 @@ for edot in edot0:
   dmin = d0*d_min[slice] 
   tau = G*tau_max[slice]
   d_ss = 1.5e4*tau**-1.3
-  #print t[:10]
-  #print tau[:10]
-  pl.semilogy(t,dmax,'-',t,dmin,'--',t,d_ss,'-.',label='$\dot\epsilon_0=${0}'.format(edot))
+  c = next(color)
+  pl.semilogy(t,dmax,'-'+c,t,dmin,'--'+c,label='$\dot\epsilon_0=${0}'.format(edot))
   pl.hold(True)
-
+  pl.semilogy(t,d_ss,':'+c,label='$\dot\epsilon_0=${0}, ss'.format(edot))
 
 
 pl.grid()
 pl.ylim(ymin=.01,ymax=1.e5)
-pl.legend(loc='best')
+lgd=pl.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 pl.xlabel('Background Strain (non-dim Time)')
 pl.ylabel('Max/Min Grain-size ($\mu m$)')
-pl.savefig('GrainSize.pdf')</string_value>
+pl.savefig('GrainSize.pdf',bbox_extra_artists=(lgd,), bbox_inches='tight')</string_value>
+    </test>
+    <test name="PlotMechanisms">
+      <string_value lines="20" type="code" language="python">import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as pl
+
+edot0 = time.parameters['edot0']
+#print time.parameters
+print edot0
+
+pl.figure()
+color = iter(['r','g','b','k','y','c','m'])
+for edot in edot0:
+  print edot
+  slice = {'edot0':edot}
+  t = time[slice]
+  edot_diff = edot_diff_max[slice]
+  edot_disl = edot_disl_max[slice]
+  edot_disGBS = edot_disGBS_max[slice]
+  edot_peierls = edot_peierls_max[slice]
+  c = next(color)
+  pl.semilogy(t,edot_diff,'-'+c,label='$\dot\epsilon_0=${0}, diff'.format(edot))
+  pl.semilogy(t,edot_disl,'--'+c,label='$\dot\epsilon_0=${0}, disl'.format(edot))
+  pl.semilogy(t,edot_disGBS,'-.'+c,label='$\dot\epsilon_0=${0}, disGBS'.format(edot))
+  pl.semilogy(t,edot_peierls,':'+c,label='$\dot\epsilon_0=${0}, peierls'.format(edot))
+  pl.hold(True)
+
+pl.grid()
+pl.ylim(ymax=1.e6)
+lgd=pl.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+pl.xlabel('Background Strain (non-dim Time)')
+pl.ylabel('Maximum Strain Rate (non-dim)')
+pl.savefig('Mechanisms.pdf',bbox_extra_artists=(lgd,), bbox_inches='tight')</string_value>
     </test>
   </tests>
 </harness_options>

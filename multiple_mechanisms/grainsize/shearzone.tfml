@@ -49,7 +49,7 @@ K&amp;H Kameyama like model.</comment>
       <real_value rank="0">0.</real_value>
     </current_time>
     <finish_time>
-      <real_value rank="0">0.2</real_value>
+      <real_value rank="0">0.1</real_value>
     </finish_time>
     <timestep>
       <coefficient name="Timestep">
