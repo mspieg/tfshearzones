@@ -97,13 +97,14 @@ K&amp;H Kameyama like model.</comment>
 edot_diff_i   = Adiff*(tau_i**ndiff)*(d_i**mdiff)*exp(-Tstardiff/T_i) 
 edot_disl_i   = Adisl*(tau_i**ndisl)*(d_i**mdisl)*exp(-Tstardisl/T_i)
 edot_disGBS_i = AdisGBS*(tau_i**ndisGBS)*(d_i**mdisGBS)*exp(-TstardisGBS/T_i) 
-edot_peierls_i = Apeierls*(1. - Bpeierls*tau_i)**2*exp(-Tstarpeierls/T_i)
+edot_peierls_i = Apeierls*exp(-Tstarpeierls/T_i*(1. - Bpeierls*tau_i)**2)
 
 # and previous time step_n
 edot_diff_n    = Adiff*(tau_n**ndiff)*(d_n**mdiff)*exp(-Tstardiff/T_n) 
 edot_disl_n    = Adisl*(tau_n**ndisl)*(d_n**mdisl)*exp(-Tstardisl/T_n) 
 edot_disGBS_n  = AdisGBS*(tau_n**ndisGBS)*(d_n**mdisGBS)*exp(-TstardisGBS/T_n) 
-edot_peierls_n = Apeierls*(1. - Bpeierls*tau_n)**2*exp(-Tstarpeierls/T_n) 
+edot_peierls_n = Apeierls*exp(-Tstarpeierls/T_n*(1. - Bpeierls*tau_n)**2)
+
 
 # total viscous strain_rate at time _i and _n
 edotv_i = edot_diff_i + edot_disl_i + edot_disGBS_i + edot_peierls_i
