@@ -127,8 +127,10 @@ d_ss = A_piezometer*tau**(-1.3)
 # Normal grain-growth law
 ddot_g = A_d*exp(-Tstard/T_i)*d_i**pd
 
-# grain-size reduction
-ddot_r = -lambda_d*(edot_disl_i + edot_disGBS_i + edot_peierls_i)*(d_i - d_ss)</string_value>
+# grain-size reduction model
+# This is a hybrid between the piezometer equilibration (ip=1) and 
+#            Hall and Parmentier linear grain reduction (ip=0)
+ddot_r = -lambda_d*(edot_disl_i + edot_disGBS_i + edot_peierls_i)*(d_i - ip*d_ss)</string_value>
     </ufl>
   </global_parameters>
   <system name="shearzone">
@@ -674,6 +676,22 @@ vector valued for three flow laws
     <coefficient name="lambda_d">
       <ufl_symbol name="global">
         <string_value lines="1">lambda_d</string_value>
+      </ufl_symbol>
+      <type name="Constant">
+        <rank name="Scalar" rank="0">
+          <value type="value" name="WholeMesh">
+            <constant>
+              <real_value rank="0">1.</real_value>
+            </constant>
+          </value>
+        </rank>
+      </type>
+      <diagnostics/>
+      <comment>weighting term for grain-size reduction term (eventually could be a function of d)</comment>
+    </coefficient>
+    <coefficient name="UsePiezometer">
+      <ufl_symbol name="global">
+        <string_value lines="1">ip</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
