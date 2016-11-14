@@ -414,7 +414,7 @@ for edot in edot0:
   pl.hold(True)
 
 pl.grid()
-pl.ylim(ymax=0.05*G)
+pl.ylim(ymin = 0., ymax=0.05*G)
 lgd=pl.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize='small')
 pl.xlabel('Background Strain (non-dim time)')
 pl.ylabel('Shear Stress (MPa)')
