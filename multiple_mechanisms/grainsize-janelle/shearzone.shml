@@ -48,7 +48,7 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constan
         </parameter>
         <parameter name="edot0">
           <values>
-            <string_value lines="1">1.e-11 2.e-11 5.e-11 1.e-10</string_value>
+            <string_value lines="1">1.e-12  2.e-12 5.e-12 1.e-11 2.e-11 5.e-11</string_value>
             <comment>1.e-14 1.e-13 1.e-12 1.e-11 1.e-10 1.e-9 1.e-8
 1.e-14 1.e-13 1.e-12</comment>
           </values>
@@ -417,7 +417,7 @@ for edot in edot0:
   pl.plot(t,Tmin,'--'+c,label='Tmin:$\dot\epsilon_0$={0}'.format(edot))
   
 pl.grid()
-pl.ylim(ymax=1.05*T0_K -273.)
+pl.ylim(ymin=0.99*T0_K-273.,ymax=1.1*T0_K -273.)
 pl.legend(loc='best')
 pl.xlabel('Background Strain (non-dim time)')
 pl.ylabel('Temperature ($^\circ$C)')
