@@ -7,7 +7,7 @@
     <mesh name="Mesh">
       <source name="File">
         <file>
-          <string_value lines="1" type="filename">mesh</string_value>
+          <string_value type="filename" lines="1">mesh</string_value>
         </file>
         <cell>
           <string_value lines="1">interval</string_value>
@@ -83,7 +83,7 @@
   </timestepping>
   <global_parameters>
     <ufl>
-      <string_value lines="20" type="code" language="python">edotv_i = A*(tau_i**n)*(d_i**m)*exp(-Tstar/T_i)
+      <string_value type="code" language="python3" lines="20">edotv_i = A*(tau_i**n)*(d_i**m)*exp(-Tstar/T_i)
 edotv_n = A*(tau_n**n)*(d_n**m)*exp(-Tstar/T_n)
 
 edot_total = edotv_i + (tau_i - tau_n)/dt</string_value>
@@ -108,7 +108,7 @@ edot_total = edotv_i + (tau_i - tau_n)/dt</string_value>
               <integer_value rank="0">0</integer_value>
             </degree>
           </element>
-          <initial_condition type="initial_condition" name="WholeMesh">
+          <initial_condition name="WholeMesh" type="initial_condition">
             <constant>
               <real_value rank="0">0.</real_value>
             </constant>
@@ -139,17 +139,17 @@ edot_total = edotv_i + (tau_i - tau_n)/dt</string_value>
               <integer_value rank="0">2</integer_value>
             </degree>
           </element>
-          <initial_condition type="initial_condition" name="WholeMesh">
+          <initial_condition name="WholeMesh" type="initial_condition">
             <constant>
               <real_value rank="0">1.</real_value>
             </constant>
           </initial_condition>
           <boundary_condition name="Dirichlet">
             <boundary_ids>
-              <integer_value shape="2" rank="1">1 2</integer_value>
+              <integer_value rank="1" shape="2">1 2</integer_value>
             </boundary_ids>
             <sub_components name="All">
-              <type type="boundary_condition" name="Dirichlet">
+              <type name="Dirichlet" type="boundary_condition">
                 <constant>
                   <real_value rank="0">1.</real_value>
                 </constant>
@@ -182,13 +182,13 @@ edot_total = edotv_i + (tau_i - tau_n)/dt</string_value>
               <integer_value rank="0">1</integer_value>
             </degree>
           </element>
-          <initial_condition type="initial_condition" name="WholeMesh">
+          <initial_condition name="WholeMesh" type="initial_condition">
             <cpp rank="0">
               <members>
-                <string_value lines="20" type="code" language="cpp">double l,lambda,dsz;</string_value>
+                <string_value type="code" language="cpp" lines="20">double l,lambda,dsz;</string_value>
               </members>
               <initialization>
-                <string_value lines="20" type="code" language="cpp">GenericFunction_ptr l_ptr = system()-&gt;fetch_coeff("ShearzoneWidth")-&gt;genericfunction_ptr(time());
+                <string_value type="code" language="cpp" lines="20">GenericFunction_ptr l_ptr = system()-&gt;fetch_coeff("ShearzoneWidth")-&gt;genericfunction_ptr(time());
 GenericFunction_ptr lambda_ptr = system()-&gt;fetch_coeff("ShearzoneTaper")-&gt;genericfunction_ptr(time());
 GenericFunction_ptr dsz_ptr = system()-&gt;fetch_coeff("ShearzoneGrainsize")-&gt;genericfunction_ptr(time());
 
@@ -197,7 +197,7 @@ lambda = double(*std::dynamic_pointer_cast&lt;dolfin::Constant&gt;(lambda_ptr));
 dsz = double(*std::dynamic_pointer_cast&lt;dolfin::Constant&gt;(dsz_ptr));</string_value>
               </initialization>
               <eval>
-                <string_value lines="20" type="code" language="cpp">double H1  = 0.5*(std::tanh((x[0] + l)/lambda) + 1.);
+                <string_value type="code" language="cpp" lines="20">double H1  = 0.5*(std::tanh((x[0] + l)/lambda) + 1.);
 double H2 = 0.5*(std::tanh((x[0] - l)/lambda) + 1.);
 values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
               </eval>
@@ -216,7 +216,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
-          <value type="value" name="WholeMesh">
+          <value name="WholeMesh" type="value">
             <constant>
               <real_value rank="0">1.</real_value>
             </constant>
@@ -232,7 +232,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
-          <value type="value" name="WholeMesh">
+          <value name="WholeMesh" type="value">
             <constant>
               <real_value rank="0">4.10387734331396e-05</real_value>
             </constant>
@@ -248,7 +248,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
-          <value type="value" name="WholeMesh">
+          <value name="WholeMesh" type="value">
             <constant>
               <real_value rank="0">0.</real_value>
             </constant>
@@ -264,7 +264,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
-          <value type="value" name="WholeMesh">
+          <value name="WholeMesh" type="value">
             <constant>
               <real_value rank="0">1.</real_value>
             </constant>
@@ -280,7 +280,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
-          <value type="value" name="WholeMesh">
+          <value name="WholeMesh" type="value">
             <constant>
               <real_value rank="0">3.5</real_value>
             </constant>
@@ -296,7 +296,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
-          <value type="value" name="WholeMesh">
+          <value name="WholeMesh" type="value">
             <constant>
               <real_value rank="0">-2.</real_value>
             </constant>
@@ -312,7 +312,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
-          <value type="value" name="WholeMesh">
+          <value name="WholeMesh" type="value">
             <constant>
               <real_value rank="0">1.</real_value>
             </constant>
@@ -328,7 +328,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
-          <value type="value" name="WholeMesh">
+          <value name="WholeMesh" type="value">
             <constant>
               <real_value rank="0">.1</real_value>
             </constant>
@@ -343,7 +343,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
-          <value type="value" name="WholeMesh">
+          <value name="WholeMesh" type="value">
             <constant>
               <real_value rank="0">.005</real_value>
               <comment>taper width for edges of shear zone</comment>
@@ -359,7 +359,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
       </ufl_symbol>
       <type name="Constant">
         <rank name="Scalar" rank="0">
-          <value type="value" name="WholeMesh">
+          <value name="WholeMesh" type="value">
             <constant>
               <real_value rank="0">.1</real_value>
               <comment>taper width for edges of shear zone</comment>
@@ -373,7 +373,7 @@ values[0] = 1. + (dsz - 1.)*(H1 - H2);</string_value>
     <nonlinear_solver name="SNES">
       <type name="SNES">
         <form name="Residual" rank="0">
-          <string_value lines="20" type="code" language="python">K = 1.
+          <string_value type="code" language="python3" lines="20">K = 1.
 V0 = 0.5
 F_tau = tau_t*(tau_i - tau_n)*dx  + dt*2.*tau_t*edotv_i*dx - dt*2.*(tau_t*V0*ds(2) + tau_t*V0*ds(1))
 F_T = T_t*(T_i - T_n)*dx + dt*invPe*K*inner(grad(T_t),grad(T_i))*dx
@@ -386,11 +386,12 @@ F = F_tau + F_T + F_d</string_value>
           </ufl_symbol>
         </form>
         <form name="Jacobian" rank="1">
-          <string_value lines="20" type="code" language="python">J = derivative(F,us_i,us_a)</string_value>
+          <string_value type="code" language="python3" lines="20">J = derivative(F,us_i,us_a)</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">J</string_value>
           </ufl_symbol>
         </form>
+        <form_representation name="quadrature"/>
         <quadrature_rule name="default"/>
         <snes_type name="ls">
           <ls_type name="cubic"/>
@@ -438,7 +439,7 @@ F = F_tau + F_T + F_d</string_value>
               <integer_value rank="0">1</integer_value>
             </degree>
           </element>
-          <initial_condition type="initial_condition" name="WholeMesh">
+          <initial_condition name="WholeMesh" type="initial_condition">
             <constant>
               <real_value rank="0">0.</real_value>
             </constant>
@@ -458,17 +459,18 @@ F = F_tau + F_T + F_d</string_value>
     <nonlinear_solver name="SNES">
       <type name="SNES">
         <form name="Residual" rank="0">
-          <string_value lines="20" type="code" language="python">F = edot_t*(edot_i - edot_total)*dx</string_value>
+          <string_value type="code" language="python3" lines="20">F = edot_t*(edot_i - edot_total)*dx</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">F</string_value>
           </ufl_symbol>
         </form>
         <form name="Jacobian" rank="1">
-          <string_value lines="20" type="code" language="python">J = derivative(F,ue_i,ue_a)</string_value>
+          <string_value type="code" language="python3" lines="20">J = derivative(F,ue_i,ue_a)</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">J</string_value>
           </ufl_symbol>
         </form>
+        <form_representation name="quadrature"/>
         <quadrature_rule name="default"/>
         <snes_type name="ls">
           <ls_type name="cubic"/>
@@ -517,7 +519,7 @@ F = F_tau + F_T + F_d</string_value>
               <integer_value rank="0">1</integer_value>
             </degree>
           </element>
-          <initial_condition type="initial_condition" name="WholeMesh">
+          <initial_condition name="WholeMesh" type="initial_condition">
             <constant>
               <real_value rank="0">0.</real_value>
             </constant>
@@ -532,17 +534,18 @@ F = F_tau + F_T + F_d</string_value>
     <nonlinear_solver name="SNES">
       <type name="SNES">
         <form name="Residual" rank="0">
-          <string_value lines="20" type="code" language="python">F = edotvp_t*(edotvp_i - edotv_i)*dx</string_value>
+          <string_value type="code" language="python3" lines="20">F = edotvp_t*(edotvp_i - edotv_i)*dx</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">F</string_value>
           </ufl_symbol>
         </form>
         <form name="Jacobian" rank="1">
-          <string_value lines="20" type="code" language="python">J = derivative(F,uev_i,uev_a)</string_value>
+          <string_value type="code" language="python3" lines="20">J = derivative(F,uev_i,uev_a)</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">J</string_value>
           </ufl_symbol>
         </form>
+        <form_representation name="quadrature"/>
         <quadrature_rule name="default"/>
         <snes_type name="ls">
           <ls_type name="cubic"/>
@@ -591,7 +594,7 @@ F = F_tau + F_T + F_d</string_value>
               <integer_value rank="0">0</integer_value>
             </degree>
           </element>
-          <initial_condition type="initial_condition" name="WholeMesh">
+          <initial_condition name="WholeMesh" type="initial_condition">
             <constant>
               <real_value rank="0">0.</real_value>
             </constant>
@@ -606,17 +609,18 @@ F = F_tau + F_T + F_d</string_value>
     <nonlinear_solver name="SNES">
       <type name="SNES">
         <form name="Residual" rank="0">
-          <string_value lines="20" type="code" language="python">F = dH_t*(dH_i - dt*Di*abs(tau_i*edotv_i))*dx</string_value>
+          <string_value type="code" language="python3" lines="20">F = dH_t*(dH_i - dt*Di*abs(tau_i*edotv_i))*dx</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">F</string_value>
           </ufl_symbol>
         </form>
         <form name="Jacobian" rank="1">
-          <string_value lines="20" type="code" language="python">J = derivative(F,uH_i,uH_a)</string_value>
+          <string_value type="code" language="python3" lines="20">J = derivative(F,uH_i,uH_a)</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">J</string_value>
           </ufl_symbol>
         </form>
+        <form_representation name="quadrature"/>
         <quadrature_rule name="default"/>
         <snes_type name="ls">
           <ls_type name="cubic"/>
