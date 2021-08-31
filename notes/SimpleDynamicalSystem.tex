@@ -1,0 +1,45 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{defs}
+\usepackage{natbib}
+ \newcommand{\edotv}{\dot{\epsilon}^{v}}
+ \newcommand{\edotb}{\edotv_{b}}
+ \newcommand{\edotsz}{\edotv_{sz}}
+ \newcommand{\Di}{\mathrm{Di}}
+
+\begin{document}
+\section{A simplified dynamical system model for ``viscous Earthquakes''}
+\label{sec:simpl-dynam-syst}
+
+Here we set up the equations governing a simplified 1-D visco-elastic system with a single non-linear flow law for viscous relaxation.  The primary variables are the stress $\tau$ in the system and the Temperature $T$ in the shear-zone.  The shearzone is assumed to be a narrow, small-grainsized region of width 2$h$ in a larger system of size 2$L$.  The dimensionless dynamical system can be written
+\begin{align}
+  \label{eq:1}
+  \diff{\tau}{t} =& 1  - 2
+                  \left[
+                  (1-l)\edotb + l\edotsz
+                  \right]\\
+ \diff{T}{t} =& \frac{1}{\Pe}(1-T) + \Di\tau
+                 \left[
+                 (1-l)\edotb + l\edotsz(T)
+                 \right]\\
+\end{align}
+where
+\begin{displaymath}
+  \edotv(T,\tau,d) = A\tau^{n} d^{m}\exp
+  \left[
+    \frac{-\Tstar}{T}
+  \right]
+\end{displaymath}
+is the generic viscous flow law and $\edotb=\edotv(T_{b},d_{b},\tau)$ is the strain-rate in the background material with grain-size $d_{b}$ and temperature $T_{b}$ and $\edotsz=\edotv(T,d_{sz},\tau)$ which is the srainrate in the shearzone.  To close the problem requires some statement of the temperature in the background $T_{b}$ and any initial grain-size variation $d(z)$.
+
+Our first model assumes $T_{b}=1$ (stays at the initial temperature) and $d_{b}=1$ is the reference grain-size.
+In the shearzone $T$ can vary but $d_{sz}<<1$.
+
+Initial conditions are that $\tau(0)=0.$, $T(0)=1.$
+
+Values for rheology parameter will be taken from \cite{kelemen_periodic_2007}
+\bibliography{Tfshearzones}
+\bibliographystyle{plainnat}
+
+\end{document}
