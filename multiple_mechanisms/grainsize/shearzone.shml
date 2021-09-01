@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <harness_options>
   <length>
     <string_value lines="1">medium</string_value>
@@ -27,8 +27,9 @@
             <string_value lines="1">1.</string_value>
           </values>
           <update>
-            <string_value lines="20" type="code" language="python">import libspud
-libspud.set_option("/system::shearzone/coefficient::ShearzoneWidth/type::Constant/rank::Scalar/value::WholeMesh/constant",float(h)/float(L))</string_value>
+            <string_value lines="20" type="code" language="python3">import libspud
+libspud.set_option("/system::shearzone/coefficient::ShearzoneWidth/type::Constant/rank::Scalar/value::WholeMesh/constant",float(h)/float(L))
+</string_value>
             <single_build/>
           </update>
           <comment>dimensional width of shear-zone in m</comment>
@@ -38,10 +39,11 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneWidth/type::Constan
             <string_value lines="1">40</string_value>
           </values>
           <update>
-            <string_value lines="20" type="code" language="python">import libspud
+            <string_value lines="20" type="code" language="python3">import libspud
 llam = float(h)/float(L)*2/float(N)
 
-libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constant/rank::Scalar/value::WholeMesh/constant",float(llam))</string_value>
+libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constant/rank::Scalar/value::WholeMesh/constant",float(llam))
+</string_value>
             <single_build/>
           </update>
           <comment>Number of cells across the shear_zone...sets the mesh resolution.</comment>
@@ -65,7 +67,7 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constan
             <string_value lines="1">5.e4</string_value>
           </values>
           <update>
-            <string_value lines="20" type="code" language="python">import libspud
+            <string_value lines="20" type="code" language="python3">import libspud
 
 # Set some Dimensionless numbers and insert in tfml file
 
@@ -82,17 +84,18 @@ Di = float(G)*1.e6/float(T0_K)/rho/cp # dissipation number (note G in MPa)
 
 s_per_year = 3600.*24.*365.25
 
-print
-print '**************** Scaling Parameters **********'
-print 'Scale velocity V0=',V0*s_per_year, 'm/yr'
-print '            1/Pe=',invPe
-print 'Dissipation # Di=',Di
-print '************************************************'
-print
+print()
+print('**************** Scaling Parameters **********')
+print('Scale velocity V0=',V0*s_per_year, 'm/yr')
+print('            1/Pe=',invPe)
+print('Dissipation # Di=',Di)
+print('************************************************')
+print()
 
 # set tfml options
 libspud.set_option("/system::shearzone/coefficient::invPe/type::Constant/rank::Scalar/value::WholeMesh/constant",invPe)
-libspud.set_option("/system::shearzone/coefficient::DissipationNumber/type::Constant/rank::Scalar/value::WholeMesh/constant",Di)</string_value>
+libspud.set_option("/system::shearzone/coefficient::DissipationNumber/type::Constant/rank::Scalar/value::WholeMesh/constant",Di)
+</string_value>
             <single_build/>
           </update>
           <comment>Elastic Shear Modulus (in MPa)  also used as a reference stress</comment>
@@ -102,8 +105,9 @@ libspud.set_option("/system::shearzone/coefficient::DissipationNumber/type::Cons
             <string_value lines="1">0.</string_value>
           </values>
           <update>
-            <string_value lines="20" type="code" language="python">import libspud
-libspud.set_option("/system::shearzone/coefficient::CoolingRate/type::Constant/rank::Scalar/value::WholeMesh/constant",float(R))</string_value>
+            <string_value lines="20" type="code" language="python3">import libspud
+libspud.set_option("/system::shearzone/coefficient::CoolingRate/type::Constant/rank::Scalar/value::WholeMesh/constant",float(R))
+</string_value>
             <single_build/>
           </update>
           <comment>Dimensionless thermal relaxation rate  R = r/edot0  gives cooling rate relateive to background strain rate.</comment>
@@ -119,8 +123,9 @@ libspud.set_option("/system::shearzone/coefficient::CoolingRate/type::Constant/r
             <string_value lines="1">100.</string_value>
           </values>
           <update>
-            <string_value lines="20" type="code" language="python">import libspud
-libspud.set_option("/system::shearzone/coefficient::ShearzoneGrainsize/type::Constant/rank::Scalar/value::WholeMesh/constant",float(dsz)/float(d0))</string_value>
+            <string_value lines="20" type="code" language="python3">import libspud
+libspud.set_option("/system::shearzone/coefficient::ShearzoneGrainsize/type::Constant/rank::Scalar/value::WholeMesh/constant",float(dsz)/float(d0))
+</string_value>
             <single_build/>
           </update>
           <comment>grain-size in shear zone in microns</comment>
@@ -130,13 +135,13 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneGrainsize/type::Con
             <string_value lines="1">[ diff disl disGBS ]</string_value>
           </values>
           <update>
-            <string_value lines="20" type="code" language="python">import libspud
+            <string_value lines="20" type="code" language="python3">import libspud
 
 R = 8.314e-3 # Gas constant  
 T0_K = float(T0) + 273.
 
 mechs = mechanism.split()
-print mechanism
+print(mechanism)
 if 'diff' in mechs:
   A = 1.5e9    # MPa^{-1} microns^{3} s^{-1}
   n = 1.       # stress exponent
@@ -144,7 +149,7 @@ if 'diff' in mechs:
   Q = 375.     # Activation energy
   Astar = A/float(edot0)*float(G)**n*float(d0)**m
   Tstar = Q/R/float(T0_K)
-  print 'using Diffusion creep: A* = {0}, T* = {1}'.format(Astar,Tstar)
+  print('using Diffusion creep: A* = {0}, T* = {1}'.format(Astar,Tstar))
   libspud.set_option("/system::shearzone/coefficient::Adiff/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
   libspud.set_option("/system::shearzone/coefficient::Tstardiff/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)
 if 'disl' in mechs: 
@@ -154,7 +159,7 @@ if 'disl' in mechs:
   Q = 530.     # Activation energy
   Astar = A/float(edot0)*float(G)**n*float(d0)**m
   Tstar = Q/R/float(T0_K)
-  print 'using Dislocation  creep: A* = {0}, T* = {1}'.format(Astar,Tstar)
+  print('using Dislocation  creep: A* = {0}, T* = {1}'.format(Astar,Tstar))
   libspud.set_option("/system::shearzone/coefficient::Adisl/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
   libspud.set_option("/system::shearzone/coefficient::Tstardisl/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)
 if 'disGBS' in mechs:
@@ -164,7 +169,7 @@ if 'disGBS' in mechs:
   Q = 400.     # Activation energy
   Astar = A/float(edot0)*float(G)**n*float(d0)**m
   Tstar = Q/R/float(T0_K)
-  print 'using Dislocation GBS creep: A* = {0}, T* = {1}'.format(Astar,Tstar)
+  print('using Dislocation GBS creep: A* = {0}, T* = {1}'.format(Astar,Tstar))
   libspud.set_option("/system::shearzone/coefficient::AdisGBS/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
   libspud.set_option("/system::shearzone/coefficient::TstardisGBS/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)
 if 'peierls' in mechs:
@@ -174,10 +179,11 @@ if 'peierls' in mechs:
   Astar = A/float(edot0)
   Bstar = float(G)*B
   Tstar = Q/R/float(T0_K)
-  print 'using Peierls low-T plasticity : A* = {0}, B* = {1}, T* = {2}'.format(Astar,Bstar,Tstar)
+  print('using Peierls low-T plasticity : A* = {0}, B* = {1}, T* = {2}'.format(Astar,Bstar,Tstar))
   libspud.set_option("/system::shearzone/coefficient::Apeierls/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
   libspud.set_option("/system::shearzone/coefficient::Bpeierls/type::Constant/rank::Scalar/value::WholeMesh/constant",Bstar)
-  libspud.set_option("/system::shearzone/coefficient::Tstarpeierls/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)</string_value>
+  libspud.set_option("/system::shearzone/coefficient::Tstarpeierls/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)
+</string_value>
             <single_build/>
           </update>
           <comment>string describing creep mechanisms
@@ -188,7 +194,7 @@ Current options are diff, disl, disGBS and peierls creep</comment>
             <string_value lines="1">none</string_value>
           </values>
           <update>
-            <string_value lines="20" type="code" language="python">import libspud
+            <string_value lines="20" type="code" language="python3">import libspud
 
 R = 8.314e-3 # Gas constant  
 T0_K = float(T0) + 273.
@@ -199,7 +205,7 @@ if 'p2' in growthmodel:
   Q = 300.     # Activation energy
   Astar = A/float(edot0)/p*float(d0)**(-p)
   Tstar = Q/R/float(T0_K)
-  print 'using K&amp;H p2 model :p={0}, A* = {1}, T* = {2}'.format(p,Astar,Tstar)
+  print('using K&amp;H p2 model :p={0}, A* = {1}, T* = {2}'.format(p,Astar,Tstar))
   libspud.set_option("/system::shearzone/coefficient::A_d/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
   libspud.set_option("/system::shearzone/coefficient::Tstard/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)
   libspud.set_option("/system::shearzone/coefficient::pd/type::Constant/rank::Scalar/value::WholeMesh/constant",(1.-p))
@@ -209,7 +215,7 @@ elif 'p3' in growthmodel:
   Q = 350.     # Activation energy
   Astar = A/float(edot0)/p*float(d0)**(-p)
   Tstar = Q/R/float(T0_K)
-  print 'using Janelles p3 model :p={0}, A* = {1}, T* = {2}'.format(p,Astar,Tstar)
+  print('using Janelles p3 model :p={0}, A* = {1}, T* = {2}'.format(p,Astar,Tstar))
   libspud.set_option("/system::shearzone/coefficient::A_d/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
   libspud.set_option("/system::shearzone/coefficient::Tstard/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)
   libspud.set_option("/system::shearzone/coefficient::pd/type::Constant/rank::Scalar/value::WholeMesh/constant",(1.-p))
@@ -219,12 +225,13 @@ elif 'none' in growthmodel:
   Q = 0.     # Activation energy
   Astar = A/float(edot0)*p*float(d0)**(-p)
   Tstar = Q/R/float(T0_K)
-  print 'No normal grain-growth model :p={0}, A* = {1}, T* = {2}'.format(p,Astar,Tstar)
+  print('No normal grain-growth model :p={0}, A* = {1}, T* = {2}'.format(p,Astar,Tstar))
   libspud.set_option("/system::shearzone/coefficient::A_d/type::Constant/rank::Scalar/value::WholeMesh/constant",Astar)
   libspud.set_option("/system::shearzone/coefficient::Tstard/type::Constant/rank::Scalar/value::WholeMesh/constant",Tstar)
   libspud.set_option("/system::shearzone/coefficient::pd/type::Constant/rank::Scalar/value::WholeMesh/constant",(1.-p))
 else:
-  print 'Error:  no growthmodel {}'.format(growthmodel)</string_value>
+  print('Error:  no growthmodel {}'.format(growthmodel))
+</string_value>
             <single_build/>
           </update>
           <comment>string describing grain-growth model 
@@ -235,23 +242,24 @@ Current options are p2, p3 and none</comment>
             <string_value lines="1">pz</string_value>
           </values>
           <update>
-            <string_value lines="20" type="code" language="python">import libspud
+            <string_value lines="20" type="code" language="python3">import libspud
 
 if reductionmodel == 'hp':
-  print 'Using Hall and Parmentier Model'
+  print('Using Hall and Parmentier Model')
   ipiezometer = 0.
 elif reductionmodel == 'pz':
-  print 'Using Piezometer equilibration'
+  print('Using Piezometer equilibration')
   ipiezometer = 1.
 else:
-  print 'Error:  no reduction model {}'.format(reductionmodel)
+  print('Error:  no reduction model {}'.format(reductionmodel))
   
 libspud.set_option("/system::shearzone/coefficient::UsePiezometer/type::Constant/rank::Scalar/value::WholeMesh/constant",ipiezometer)
 
 # set coefficients for the piezometer
 A = 1.5e4/float(d0)*float(G)**(-1.3)
-print 'A_Piezometer = ',A
-libspud.set_option("/system::shearzone/coefficient::A_piezometer/type::Constant/rank::Scalar/value::WholeMesh/constant",A)</string_value>
+print('A_Piezometer = ',A)
+libspud.set_option("/system::shearzone/coefficient::A_piezometer/type::Constant/rank::Scalar/value::WholeMesh/constant",A)
+</string_value>
             <single_build/>
           </update>
           <comment>string describing grain-reduction model 
@@ -265,8 +273,9 @@ where hp is hall and parmentier
             <string_value lines="1">10.</string_value>
           </values>
           <update>
-            <string_value lines="20" type="code" language="python">import libspud
-libspud.set_option("/system::shearzone/coefficient::lambda_d/type::Constant/rank::Scalar/value::WholeMesh/constant",float(lambda_d))</string_value>
+            <string_value lines="20" type="code" language="python3">import libspud
+libspud.set_option("/system::shearzone/coefficient::lambda_d/type::Constant/rank::Scalar/value::WholeMesh/constant",float(lambda_d))
+</string_value>
             <single_build/>
           </update>
           <comment>Weight in grain-size reduction term
@@ -285,16 +294,17 @@ setting \lambda_d =0 turns off all grain-size reduction terms</comment>
             <parameter name="h"/>
             <parameter name="N">
               <update>
-                <string_value lines="20" type="code" language="python">from string import Template as template
+                <string_value lines="20" type="code" language="python3">from string import Template as template
 
 h_on_L = float(h)/float(L)
 cl_min = h_on_L/float(N)
 
-print '******************* mesh parameters ******************'
-print ' shear zone width h/L= ',h_on_L
-print ' minimum resolution h_min =', cl_min
-print '******************************************************'
-input_file = template(input_file).safe_substitute({'cl_min':cl_min,'h_on_L':h_on_L})</string_value>
+print('******************* mesh parameters ******************')
+print(' shear zone width h/L= ',h_on_L)
+print(' minimum resolution h_min =', cl_min)
+print('******************************************************')
+input_file = template(input_file).safe_substitute({'cl_min':cl_min,'h_on_L':h_on_L})
+</string_value>
               </update>
             </parameter>
           </parameter_sweep>
@@ -320,68 +330,79 @@ input_file = template(input_file).safe_substitute({'cl_min':cl_min,'h_on_L':h_on
       </dependencies>
       <variables>
         <variable name="tau_max">
-          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+          <string_value lines="20" type="code" language="python3">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
-tau_max = stat["shearzone"]["Stress"]["max"]</string_value>
+tau_max = stat["shearzone"]["Stress"]["max"]
+</string_value>
         </variable>
         <variable name="edot_max">
-          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+          <string_value lines="20" type="code" language="python3">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
-edot_max = stat["total_strainrate"]["strainrate"]["max"]</string_value>
+edot_max = stat["total_strainrate"]["strainrate"]["max"]
+</string_value>
           <comment>maximum shear stress</comment>
         </variable>
         <variable name="T_min">
-          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+          <string_value lines="20" type="code" language="python3">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
-T_min = stat["shearzone"]["Temperature"]["min"]</string_value>
+T_min = stat["shearzone"]["Temperature"]["min"]
+</string_value>
           <comment>maximum shear stress</comment>
         </variable>
         <variable name="T_max">
-          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+          <string_value lines="20" type="code" language="python3">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
-T_max = stat["shearzone"]["Temperature"]["max"]</string_value>
+T_max = stat["shearzone"]["Temperature"]["max"]
+</string_value>
           <comment>maximum shear stress</comment>
         </variable>
         <variable name="time">
-          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+          <string_value lines="20" type="code" language="python3">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
-time = stat["ElapsedTime"]["value"]</string_value>
+time = stat["ElapsedTime"]["value"]
+</string_value>
           <comment>maximum shear stress</comment>
         </variable>
         <variable name="d_max">
-          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+          <string_value lines="20" type="code" language="python3">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
-d_max = stat["shearzone"]["Grainsize"]["max"]</string_value>
+d_max = stat["shearzone"]["Grainsize"]["max"]
+</string_value>
           <comment>maximum shear stress</comment>
         </variable>
         <variable name="d_min">
-          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+          <string_value lines="20" type="code" language="python3">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
-d_min = stat["shearzone"]["Grainsize"]["min"]</string_value>
+d_min = stat["shearzone"]["Grainsize"]["min"]
+</string_value>
           <comment>maximum shear stress</comment>
         </variable>
         <variable name="edot_diff_max">
-          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+          <string_value lines="20" type="code" language="python3">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
-edot_diff_max = stat["edot_diffp"]["edotdiffp"]["max"]</string_value>
+edot_diff_max = stat["edot_diffp"]["edotdiffp"]["max"]
+</string_value>
           <comment>maximum shear stress</comment>
         </variable>
         <variable name="edot_disl_max">
-          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+          <string_value lines="20" type="code" language="python3">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
-edot_disl_max = stat["edot_dislp"]["edotdislp"]["max"]</string_value>
+edot_disl_max = stat["edot_dislp"]["edotdislp"]["max"]
+</string_value>
           <comment>maximum shear stress</comment>
         </variable>
         <variable name="edot_disGBS_max">
-          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+          <string_value lines="20" type="code" language="python3">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
-edot_disGBS_max = stat["edot_disGBSp"]["edotdisGBSp"]["max"]</string_value>
+edot_disGBS_max = stat["edot_disGBSp"]["edotdisGBSp"]["max"]
+</string_value>
           <comment>maximum shear stress</comment>
         </variable>
         <variable name="edot_peierls_max">
-          <string_value lines="20" type="code" language="python">from buckettools.statfile import parser
+          <string_value lines="20" type="code" language="python3">from buckettools.statfile import parser
 stat = parser("shearzone_out.stat")
-edot_peierls_max = stat["edot_peierlsp"]["edotpeierlsp"]["max"]</string_value>
+edot_peierls_max = stat["edot_peierlsp"]["edotpeierlsp"]["max"]
+</string_value>
           <comment>maximum shear stress</comment>
         </variable>
       </variables>
@@ -389,7 +410,7 @@ edot_peierls_max = stat["edot_peierlsp"]["edotpeierlsp"]["max"]</string_value>
   </simulations>
   <tests>
     <test name="PlotStress">
-      <string_value lines="20" type="code" language="python">import numpy as np
+      <string_value lines="20" type="code" language="python3">import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as pl
@@ -410,11 +431,11 @@ title = 'Stress: ($L=${}, $h=${}, $R=${}, $\dot d$=[{},{}], $\lambda_d=${})'.for
 pl.figure()
 color = iter(['r','g','b','k','y','c','m'])
 for edot in edot0:
-  print edot
+  print(edot)
   slice = {'edot0':edot}
   t = time[slice]
   tau = G*tau_max[slice]
-  print tau[:10]
+  print(tau[:10])
   c = next(color)
   pl.plot(t,tau,'-'+c,label='$\dot\epsilon_0=${0}'.format(edot))
   pl.hold(True)
@@ -425,10 +446,11 @@ lgd=pl.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize='small')
 pl.xlabel('Background Strain (non-dim time)')
 pl.ylabel('Shear Stress (MPa)')
 pl.title(title)
-pl.savefig('Stress_{}.pdf'.format(label),bbox_extra_artists=(lgd,), bbox_inches='tight')</string_value>
+pl.savefig('Stress_{}.pdf'.format(label),bbox_extra_artists=(lgd,), bbox_inches='tight')
+</string_value>
     </test>
     <test name="PlotT">
-      <string_value lines="20" type="code" language="python">import numpy as np
+      <string_value lines="20" type="code" language="python3">import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as pl
@@ -451,7 +473,7 @@ title = 'Temperature: ($L=${}, $h=${}, $R=${}, $\dot d$=[{},{}], $\lambda_d=${})
 pl.figure()
 color = iter(['r','g','b','k','y','c','m'])
 for edot in edot0:
-  print edot
+  print(edot)
   slice = {'edot0':edot}
   t = time[slice]
   Tmax = T0_K*T_max[slice] - 273.
@@ -467,10 +489,11 @@ lgd=pl.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize='small')
 pl.xlabel('Background Strain (non-dim time)')
 pl.ylabel('Temperature ($^\circ$C)')
 pl.title(title)
-pl.savefig('Temperature_{}.pdf'.format(label),bbox_extra_artists=(lgd,), bbox_inches='tight')</string_value>
+pl.savefig('Temperature_{}.pdf'.format(label),bbox_extra_artists=(lgd,), bbox_inches='tight')
+</string_value>
     </test>
     <test name="PlotStrainRate">
-      <string_value lines="20" type="code" language="python">import numpy as np
+      <string_value lines="20" type="code" language="python3">import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as pl
@@ -490,7 +513,7 @@ title = 'Strain Rate: ($L=${}, $h=${}, $R=${}, $\dot d$=[{},{}], $\lambda_d=${})
 pl.figure()
 color = iter(['r','g','b','k','y','c','m'])
 for edot in edot0:
-  print edot
+  print(edot)
   slice = {'edot0':edot}
   t = time[slice]
   edotmax = edot_max[slice]
@@ -504,10 +527,11 @@ lgd=pl.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize='small')
 pl.xlabel('Background Strain (non-dim Time)')
 pl.ylabel('Maximum Strain Rate (non-dim)')
 pl.title(title)
-pl.savefig('StrainRate_{}.pdf'.format(label),bbox_extra_artists=(lgd,), bbox_inches='tight')</string_value>
+pl.savefig('StrainRate_{}.pdf'.format(label),bbox_extra_artists=(lgd,), bbox_inches='tight')
+</string_value>
     </test>
     <test name="PlotGrainSize">
-      <string_value lines="20" type="code" language="python">import numpy as np
+      <string_value lines="20" type="code" language="python3">import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as pl
@@ -529,7 +553,7 @@ title = 'Grain Size: ($L=${}, $h=${}, $R=${}, $\dot d$=[{},{}], $\lambda_d=${})'
 pl.figure()
 color = iter(['r','g','b','k','y','c','m'])
 for edot in edot0:
-  print edot
+  print(edot)
   slice = {'edot0':edot}
   t = time[slice]
   dmax = d0*d_max[slice]
@@ -548,10 +572,11 @@ lgd=pl.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize='small')
 pl.xlabel('Background Strain (non-dim Time)')
 pl.ylabel('Max/Min Grain-size ($\mu m$)')
 pl.title(title)
-pl.savefig('GrainSize_{}.pdf'.format(label),bbox_extra_artists=(lgd,), bbox_inches='tight')</string_value>
+pl.savefig('GrainSize_{}.pdf'.format(label),bbox_extra_artists=(lgd,), bbox_inches='tight')
+</string_value>
     </test>
     <test name="PlotMechanisms">
-      <string_value lines="20" type="code" language="python">import numpy as np
+      <string_value lines="20" type="code" language="python3">import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as pl
@@ -571,7 +596,7 @@ title = 'Mechanisms: ($L=${}, $h=${}, $R=${}, $\dot d$=[{},{}], $\lambda_d=${})'
 pl.figure()
 color = iter(['r','g','b','k','y','c','m'])
 for edot in edot0:
-  print edot
+  print(edot)
   slice = {'edot0':edot}
   t = time[slice]
   edot_diff = edot_diff_max[slice]
@@ -591,7 +616,8 @@ lgd=pl.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize='small')
 pl.xlabel('Background Strain (non-dim Time)')
 pl.ylabel('Maximum Strain Rate (non-dim)')
 pl.title(title)
-pl.savefig('Mechanisms_{}.pdf'.format(label),bbox_extra_artists=(lgd,), bbox_inches='tight')</string_value>
+pl.savefig('Mechanisms_{}.pdf'.format(label),bbox_extra_artists=(lgd,), bbox_inches='tight')
+</string_value>
     </test>
   </tests>
 </harness_options>

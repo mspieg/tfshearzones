@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <terraferma_options>
   <geometry>
     <dimension>
@@ -83,7 +83,7 @@
   </timestepping>
   <global_parameters>
     <ufl>
-      <string_value lines="20" type="code" language="python">edotv_i = ( Adiff*(tau_i**ndiff)*(d_i**mdiff)*exp(-Tstardiff/T_i) 
+      <string_value lines="20" type="code" language="python3">edotv_i = ( Adiff*(tau_i**ndiff)*(d_i**mdiff)*exp(-Tstardiff/T_i) 
   + Adisl*(tau_i**ndisl)*(d_i**mdisl)*exp(-Tstardisl/T_i) 
   + AdisGBS*(tau_i**ndisGBS)*(d_i**mdisGBS)*exp(-TstardisGBS/T_i) 
   + Apeierls*(1. - Bpeierls*tau_i)**2*exp(-Tstarpeierls/T_i) )
@@ -96,7 +96,8 @@ edotv_n = ( Adiff*(tau_n**ndiff)*(d_n**mdiff)*exp(-Tstardiff/T_n)
 
 
 
-edot_total = edotv_i + (tau_i - tau_n)/dt</string_value>
+edot_total = edotv_i + (tau_i - tau_n)/dt
+</string_value>
     </ufl>
   </global_parameters>
   <system name="shearzone">
@@ -588,20 +589,22 @@ vector valued for three flow laws
     <nonlinear_solver name="SNES">
       <type name="SNES">
         <form name="Residual" rank="0">
-          <string_value lines="20" type="code" language="python">K = 1.
+          <string_value lines="20" type="code" language="python3">K = 1.
 V0 = 0.5
 F_tau = tau_t*(tau_i - tau_n)*dx  + dt*2.*tau_t*edotv_i*dx - dt*2.*(tau_t*V0*ds(2) + tau_t*V0*ds(1))
 F_T = T_t*(T_i - T_n)*dx + dt*invPe*K*inner(grad(T_t),grad(T_i))*dx
 F_T += -dt*Di*T_t*tau_i*edotv_i*dx - dt*T_t*R*(1. - T_i)*dx
 F_d = d_t*(d_i - d_n)*dx
 
-F = F_tau + F_T + F_d</string_value>
+F = F_tau + F_T + F_d
+</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">F</string_value>
           </ufl_symbol>
         </form>
         <form name="Jacobian" rank="1">
-          <string_value lines="20" type="code" language="python">J = derivative(F,us_i,us_a)</string_value>
+          <string_value lines="20" type="code" language="python3">J = derivative(F,us_i,us_a)
+</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">J</string_value>
           </ufl_symbol>
@@ -673,13 +676,15 @@ F = F_tau + F_T + F_d</string_value>
     <nonlinear_solver name="SNES">
       <type name="SNES">
         <form name="Residual" rank="0">
-          <string_value lines="20" type="code" language="python">F = edot_t*(edot_i - edot_total)*dx</string_value>
+          <string_value lines="20" type="code" language="python3">F = edot_t*(edot_i - edot_total)*dx
+</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">F</string_value>
           </ufl_symbol>
         </form>
         <form name="Jacobian" rank="1">
-          <string_value lines="20" type="code" language="python">J = derivative(F,ue_i,ue_a)</string_value>
+          <string_value lines="20" type="code" language="python3">J = derivative(F,ue_i,ue_a)
+</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">J</string_value>
           </ufl_symbol>
@@ -747,13 +752,15 @@ F = F_tau + F_T + F_d</string_value>
     <nonlinear_solver name="SNES">
       <type name="SNES">
         <form name="Residual" rank="0">
-          <string_value lines="20" type="code" language="python">F = edotvp_t*(edotvp_i - edotv_i)*dx</string_value>
+          <string_value lines="20" type="code" language="python3">F = edotvp_t*(edotvp_i - edotv_i)*dx
+</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">F</string_value>
           </ufl_symbol>
         </form>
         <form name="Jacobian" rank="1">
-          <string_value lines="20" type="code" language="python">J = derivative(F,uev_i,uev_a)</string_value>
+          <string_value lines="20" type="code" language="python3">J = derivative(F,uev_i,uev_a)
+</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">J</string_value>
           </ufl_symbol>
@@ -821,13 +828,15 @@ F = F_tau + F_T + F_d</string_value>
     <nonlinear_solver name="SNES">
       <type name="SNES">
         <form name="Residual" rank="0">
-          <string_value lines="20" type="code" language="python">F = dH_t*(dH_i - dt*Di*abs(tau_i*edotv_i))*dx</string_value>
+          <string_value lines="20" type="code" language="python3">F = dH_t*(dH_i - dt*Di*abs(tau_i*edotv_i))*dx
+</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">F</string_value>
           </ufl_symbol>
         </form>
         <form name="Jacobian" rank="1">
-          <string_value lines="20" type="code" language="python">J = derivative(F,uH_i,uH_a)</string_value>
+          <string_value lines="20" type="code" language="python3">J = derivative(F,uH_i,uH_a)
+</string_value>
           <ufl_symbol name="solver">
             <string_value lines="1">J</string_value>
           </ufl_symbol>
