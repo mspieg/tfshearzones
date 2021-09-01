@@ -18,13 +18,13 @@
       <parameter_sweep>
         <parameter name="L">
           <values>
-            <string_value lines="1">50.</string_value>
+            <string_value lines="1">2000.</string_value>
           </values>
           <comment>system size  \Omega = [-L/2,L/2],  size in m</comment>
         </parameter>
         <parameter name="h">
           <values>
-            <string_value lines="1">0.05</string_value>
+            <string_value lines="1">1.</string_value>
           </values>
           <update>
             <string_value type="code" language="python3" lines="20">import libspud
@@ -48,7 +48,7 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constan
         </parameter>
         <parameter name="edot0">
           <values>
-            <string_value lines="1">6.2e-12 6.4e-12 6.6e-12 6.8e-12 6.9e-12 6.95e-12</string_value>
+            <string_value lines="1">1.e-14 1.e-13 1.e-12 2e-12 5e-12 1.e-11</string_value>
             <comment>6.2e-12 6.4e-12 6.6e-12 6.8e-12 6.9e12 6.95e12
 5.e-12 6.e-12 7.e-12 8.e-12 9.e-12
 
@@ -114,13 +114,13 @@ libspud.set_option("/system::shearzone/coefficient::CoolingRate/type::Constant/r
         </parameter>
         <parameter name="d0">
           <values>
-            <string_value lines="1">1.e4</string_value>
+            <string_value lines="1">4000.</string_value>
           </values>
           <comment>reference grain size in microns</comment>
         </parameter>
         <parameter name="dsz">
           <values>
-            <string_value lines="1">50.</string_value>
+            <string_value lines="1">1.</string_value>
           </values>
           <update>
             <string_value type="code" language="python3" lines="20">import libspud
@@ -279,7 +279,7 @@ import matplotlib.pyplot as pl
 
 edot0 = time.parameters['edot0']
 T0 = float(time.parameters['T0'][0])
-T0_K = T0 + 273.
+T0_K = T0 + 273.15
 
 #print time.parameters
 print(edot0, T0)
@@ -294,7 +294,7 @@ for edot in edot0:
 
 
 pl.grid()
-pl.ylim(ymin=.99*T0_K -273,ymax=1.09*T0_K -273.)
+#pl.ylim(ymin=.99*T0_K -273.15,ymax=1.09*T0_K -273.15)
 pl.legend(loc='best')
 pl.xlabel('Background Strain (non-dim time)')
 pl.ylabel('Temperature ($^\circ$C)')
