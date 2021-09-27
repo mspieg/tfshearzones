@@ -48,12 +48,14 @@ libspud.set_option("/system::shearzone/coefficient::ShearzoneTaper/type::Constan
         </parameter>
         <parameter name="edot0">
           <values>
-            <string_value lines="1">1.e-14 1.e-13 1.e-12 2e-12 5e-12 1.e-11</string_value>
+            <string_value lines="1">2e-12 2.5e-12 2.6e-12 2.7e-12 2.8e-12 2.9e-12 3.e-12</string_value>
             <comment>6.2e-12 6.4e-12 6.6e-12 6.8e-12 6.9e12 6.95e12
 5.e-12 6.e-12 7.e-12 8.e-12 9.e-12
 
 
-8.e-12 9.e-12 1.e-11 1.05e-11 1.0525e-11 1.055e-11 1.0575e-11 1.06e-11 1.1e-11 1.2e-11</comment>
+8.e-12 9.e-12 1.e-11 1.05e-11 1.0525e-11 1.055e-11 1.0575e-11 1.06e-11 1.1e-11 1.2e-11
+
+1.e-14 1.e-13 1.e-12 2e-12 5e-12 1.e-11</comment>
           </values>
           <comment>boundary driven strain rate ( s^-1)  such that V0 = 2*edot0*L</comment>
         </parameter>
@@ -103,7 +105,7 @@ libspud.set_option("/system::shearzone/coefficient::DissipationNumber/type::Cons
         </parameter>
         <parameter name="R">
           <values>
-            <string_value lines="1">0.</string_value>
+            <string_value lines="1">10.</string_value>
           </values>
           <update>
             <string_value type="code" language="python3" lines="20">import libspud
@@ -265,7 +267,7 @@ for edot in edot0:
   pl.plot(t,tau,label='$\dot\epsilon_0=${0}'.format(edot))
 
 pl.grid()
-pl.ylim(ymax=0.17*G)
+#pl.ylim(ymax=0.17*G)
 pl.legend(loc='best')
 pl.xlabel('Background Strain (non-dim time)')
 pl.ylabel('Shear Stress (MPa)')
